@@ -1,0 +1,2705 @@
+<!DOCTYPE html>
+<html lang="tr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#09090b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AjandaPro">
+    <title>AjandaPro Black — Kişisel Günlük Ajanda & Performans Asistanı</title>
+
+    <!-- Özel Siyah-Karbon SVG Favicon & Apple Touch Icon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2318181b'/%3E%3Cstop offset='100%25' stop-color='%23050507'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23bg)'/%3E%3Crect x='1.5' y='1.5' width='61' height='61' rx='14.5' fill='none' stroke='%23ffffff' stroke-opacity='0.22' stroke-width='1.5'/%3E%3Crect x='16' y='19' width='32' height='29' rx='7' fill='none' stroke='%23ffffff' stroke-width='3'/%3E%3Cline x1='24' y1='14' x2='24' y2='22' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='40' y1='14' x2='40' y2='22' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M24 34 L30 40 L41 28' fill='none' stroke='%23ffffff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%2309090b'/%3E%3Crect x='42' y='52' width='96' height='84' rx='18' fill='none' stroke='%23ffffff' stroke-width='8'/%3E%3Cpath d='M68 96 L84 112 L114 80' fill='none' stroke='%23ffffff' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="manifest" id="pwa-manifest-link" href="#">
+
+    <!-- Tailwind CSS & Google Fonts (Inter) & Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.35);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.55);
+        }
+        .task-card-drag-over {
+            border-top: 3px solid #6366f1 !important;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.65; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- ÜST NAVİGASYON BARI -->
+    <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+            <!-- Marka Logosu (AjandaPro Black) -->
+            <button type="button" onclick="goToToday()" class="flex items-center gap-2.5 text-left group focus:outline-none shrink-0" title="Bugüne Dön">
+                <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-br from-zinc-800 via-zinc-950 to-black border border-white/15 shadow-lg shadow-black/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <svg viewBox="0 0 36 36" class="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="6" y="8" width="24" height="22" rx="5.5" stroke="#ffffff" stroke-width="2.3"/>
+                        <line x1="12.5" y1="5" x2="12.5" y2="10.5" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
+                        <line x1="23.5" y1="5" x2="23.5" y2="10.5" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
+                        <path d="M12.5 19.5L16.5 23.5L24 15.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-zinc-950"></span>
+                </div>
+                <div class="hidden sm:block">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-base font-black tracking-tight text-slate-900 dark:text-white">AjandaPro</span>
+                        <span class="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-zinc-900 text-white dark:bg-white dark:text-zinc-950">Black</span>
+                    </div>
+                    <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 -mt-0.5">Kişisel Performans Ajandası</p>
+                </div>
+            </button>
+
+            <!-- Tarih Gezgini -->
+            <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-2xl border border-slate-200/70 dark:border-slate-700/70">
+                <button type="button" onclick="shiftSelectedDate(-1)" class="p-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition" title="Önceki Gün (←)">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <div class="relative flex items-center">
+                    <input type="date" id="header-date-picker" onchange="onDatePickerChange(this.value)" class="bg-transparent text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100 px-2 py-1 rounded-xl focus:outline-none cursor-pointer">
+                </div>
+                <button type="button" onclick="shiftSelectedDate(1)" class="p-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition" title="Sonraki Gün (→)">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+                <button type="button" onclick="goToToday()" class="hidden md:inline-flex px-2.5 py-1.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-extrabold hover:opacity-90 transition">
+                    Bugün
+                </button>
+            </div>
+
+            <!-- Sağ Aksiyon Butonları -->
+            <div class="flex items-center gap-1.5">
+                <button type="button" onclick="openZenMode()" class="px-2.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition" title="Tam Ekran Odak Modu">
+                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                    <span class="hidden lg:inline">Odak Modu</span>
+                </button>
+                <button type="button" onclick="openShutdownModal()" class="px-2.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-extrabold flex items-center gap-1.5 transition" title="Sunsama Modeli Gün Sonu Kapanış Ritüeli">
+                    <i data-lucide="moon-star" class="w-3.5 h-3.5"></i>
+                    <span class="hidden xl:inline">Günü Kapat</span>
+                </button>
+                <button type="button" onclick="openSyncModal()" class="px-2.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 transition" title="iPhone & Mac Cihaz Eşitleme">
+                    <i data-lucide="smartphone" class="w-3.5 h-3.5 text-emerald-500"></i>
+                    <span class="hidden xl:inline">Cihaz Eşitle</span>
+                </button>
+                <button type="button" onclick="openTemplatesModal()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition" title="KPSS & Antrenman Şablonları">
+                    <i data-lucide="layout-template" class="w-4 h-4"></i>
+                </button>
+                <button type="button" onclick="openStatsModal()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition" title="Haftalık İstatistik & Yedekleme">
+                    <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                </button>
+                <button type="button" onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition" title="Koyu / Açık Tema">
+                    <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- TRABZONSPOR MAÇ GÜNÜ BORDO-MAVİ ŞERİDİ -->
+    <div id="ts-match-banner" class="hidden max-w-7xl w-full mx-auto px-3 sm:px-6 pt-3">
+        <div class="rounded-2xl bg-gradient-to-r from-[#6b1427] via-[#4a1836] to-[#123d5e] text-white px-4 py-3 shadow-lg shadow-[#6b1427]/20 border border-white/15 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center font-black text-sm tracking-tighter border border-white/20 shrink-0">
+                    <span class="text-[#ff8fa3]">T</span><span class="text-[#7dd3fc]">S</span>
+                </div>
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/20 text-[#9be0ff]" id="ts-match-league">UEFA Konferans Ligi</span>
+                        <span class="text-xs font-extrabold text-amber-300 flex items-center gap-1">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            <span id="ts-match-time">Saat 23:00</span>
+                        </span>
+                        <span id="ts-match-countdown" class="hidden text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-black/35 text-emerald-300 border border-white/15"></span>
+                    </div>
+                    <p id="ts-match-title" class="text-sm sm:text-base font-black tracking-tight mt-0.5">CSKA Sofya - Trabzonspor</p>
+                    <p id="ts-match-venue" class="text-[11px] text-white/75">Bulgaristan Ordu Stadyumu • Sofya</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 ml-auto sm:ml-0">
+                <button type="button" onclick="addTrabzonsporMatchToTasks()" id="ts-add-task-btn" class="px-3 py-1.5 rounded-xl bg-white text-[#6b1427] hover:bg-sky-100 text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition active:scale-95">
+                    <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i>
+                    <span>Ajandama Ekle</span>
+                </button>
+                <button type="button" onclick="openTsFixtureModal()" class="px-2.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition" title="Tüm Trabzonspor Fikstürü">
+                    Fikstür
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALI SAHA MAÇ GÜNÜ BESLENME & HAZIRLIK REHBERİ -->
+    <div id="halisaha-prep-banner" class="hidden max-w-7xl w-full mx-auto px-3 sm:px-6 pt-3">
+        <div class="rounded-2xl bg-gradient-to-r from-emerald-950 via-teal-900 to-emerald-900 text-white p-4 shadow-lg shadow-emerald-950/20 border border-emerald-500/30 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-400/20 border border-emerald-300/30 flex items-center justify-center text-lg shrink-0">⚽</div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200">Maç Günü Rehberi</span>
+                            <span id="halisaha-match-time-badge" class="text-xs font-extrabold text-amber-300"></span>
+                        </div>
+                        <h3 class="text-sm font-black tracking-tight mt-0.5">Halı Saha Beslenme & Sakatlık Önleme Planı</h3>
+                    </div>
+                </div>
+                <button type="button" onclick="addHaliSahaChecklistToTask()" class="px-3 py-1.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-emerald-950 text-xs font-extrabold flex items-center gap-1.5 transition active:scale-95">
+                    <i data-lucide="list-checks" class="w-3.5 h-3.5"></i>
+                    <span>Göreve Alt Madde Ekle</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+                <div class="p-3 rounded-xl bg-black/25 border border-white/10 space-y-1">
+                    <p class="font-extrabold text-emerald-300 flex items-center gap-1.5">🍽️ Maçtan 3-4 Saat Önce</p>
+                    <p class="text-white/85 leading-relaxed">Kompleks karbonhidrat + hafif protein tüketin (<strong>tavuklu pilav/makarna, bulgur, yoğurt</strong>). Kızartma, ağır yağlı ve gaz yapıcı yemeklerden kaçının.</p>
+                </div>
+                <div class="p-3 rounded-xl bg-black/25 border border-white/10 space-y-1">
+                    <p class="font-extrabold text-amber-300 flex items-center gap-1.5">⚡ Maçtan 45-60 Dk Önce & Sonra</p>
+                    <p class="text-white/85 leading-relaxed">Öncesinde <strong>1 muz + 1 fincan sade filtre kahve</strong> veya 2 hurma alın. Maç bitiminde kas onarımı için <strong>kefir/süt, yumurta veya ton balığı</strong> tüketin.</p>
+                </div>
+                <div class="p-3 rounded-xl bg-black/25 border border-white/10 space-y-1">
+                    <p class="font-extrabold text-sky-300 flex items-center gap-1.5">💧 Su & Isınma Kuralı</p>
+                    <p class="text-white/85 leading-relaxed">Gün boyu en az <strong>2.5 - 3 L su</strong> için (maçtan 30 dk önce yudumlayın). Sahaya çıkmadan <strong>10 dk dinamik ısınma + ayak bileği/hamstring</strong> açma yapın.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANA İÇERİK ALANI -->
+    <main class="max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        <!-- SOL PANEL: İLERLEME, SU SAYACI, ODAK SAYACI + ORTAM SESLERİ & AYLIK TAKVİM -->
+        <aside class="lg:col-span-4 space-y-4">
+
+            <!-- Günlük İlerleme & Hızlı Aksiyonlar Kartı -->
+            <section class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
+                <div class="flex items-start justify-between gap-2">
+                    <div>
+                        <p id="selected-date-label" class="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white">26 Kasım 2026, Perşembe</p>
+                        <p id="selected-date-sub" class="text-xs font-medium text-slate-500 dark:text-slate-400">Bugünün planı</p>
+                    </div>
+                    <span id="completion-badge" class="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-300 text-xs font-black">%0</span>
+                </div>
+
+                <!-- İlerleme Çubuğu -->
+                <div class="space-y-1.5">
+                    <div class="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div id="completion-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                        <span id="tasks-count-label">0 / 0 görev tamamlandı</span>
+                        <span id="total-hours-label">0 sa planlandı</span>
+                    </div>
+                </div>
+
+                <!-- Enerji / Aşırı Yüklenme Uyarısı (Sunsama Time Budgeting) -->
+                <div id="burnout-warning" class="hidden p-2.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 text-amber-800 dark:text-amber-200 text-xs font-semibold flex items-center gap-2">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500 shrink-0"></i>
+                    <span id="burnout-warning-text">Bugün 8 saatten fazla iş planladın, dinlenme molası bırak.</span>
+                </div>
+
+                <!-- Hızlı Aksiyon Butonları -->
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <button type="button" onclick="carryOverUnfinishedTasks()" class="px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-indigo-500"></i>
+                        <span>Bitenleri Koru / Devret</span>
+                    </button>
+                    <button type="button" onclick="shareDailyPlanText()" class="px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="share-2" class="w-3.5 h-3.5 text-emerald-500"></i>
+                        <span>Planı Paylaş</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Su İçme Sayacı (200 ml) -->
+            <section class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+                            <i data-lucide="droplets" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-extrabold text-slate-900 dark:text-white">Su Takibi (200 ml)</h2>
+                            <p id="water-glasses-label" class="text-[11px] font-medium text-slate-500 dark:text-slate-400">0 bardak • Hedef 2.4 L</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="cycleWaterGoal()" class="px-2.5 py-1 rounded-xl bg-sky-50 dark:bg-sky-950/70 text-sky-600 dark:text-sky-300 text-[11px] font-extrabold hover:bg-sky-100 transition" title="Günlük Hedefi Değiştir">
+                        Hedef
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-baseline gap-1">
+                        <span id="water-ml-value" class="text-2xl font-black text-sky-600 dark:text-sky-400">0</span>
+                        <span class="text-xs font-bold text-slate-400">/ <span id="water-goal-ml">2400</span> ml</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" onclick="adjustWater(-200)" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-black flex items-center justify-center transition" title="200 ml Geri Al">
+                            -
+                        </button>
+                        <button type="button" onclick="adjustWater(200)" class="px-3.5 h-9 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-extrabold flex items-center gap-1 shadow-sm shadow-sky-500/25 transition active:scale-95">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            <span>200 ml</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div id="water-progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-blue-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </section>
+
+            <!-- Pomodoro Odak Sayacı & Ortam Sesleri (Ambient Soundscapes) -->
+            <section class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3.5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                            <i data-lucide="timer" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-extrabold text-slate-900 dark:text-white">Odak Sayacı</h2>
+                            <p id="pomo-task-label" class="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate max-w-[160px]">Serbest Odak Oturumu</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="toggleCustomPomoPanel()" class="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-bold transition">
+                        Özel Süre
+                    </button>
+                </div>
+
+                <!-- Özel Süre Ayarlama Alanı -->
+                <div id="custom-pomo-panel" class="hidden p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5 text-xs font-bold">
+                        <input type="number" id="custom-pomo-min" min="0" max="240" value="45" class="w-14 px-2 py-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-center font-extrabold">
+                        <span>dk</span>
+                        <input type="number" id="custom-pomo-sec" min="0" max="59" value="0" class="w-14 px-2 py-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-center font-extrabold">
+                        <span>sn</span>
+                    </div>
+                    <button type="button" onclick="applyCustomPomoDuration()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold transition">
+                        Ayarla
+                    </button>
+                </div>
+
+                <!-- Dijital Sayaç Göstergesi -->
+                <div class="text-center py-2 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                    <div id="pomo-display" class="text-3xl sm:text-4xl font-black tracking-tight font-mono text-slate-900 dark:text-white">25:00</div>
+                    <div class="flex items-center justify-center gap-1.5 mt-2">
+                        <button type="button" onclick="setPomodoroPreset(25)" class="px-2 py-0.5 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-indigo-500 transition">25 dk</button>
+                        <button type="button" onclick="setPomodoroPreset(50)" class="px-2 py-0.5 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-indigo-500 transition">50 dk</button>
+                        <button type="button" onclick="setPomodoroPreset(10)" class="px-2 py-0.5 rounded-lg text-[11px] font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-indigo-500 transition">10 dk Mola</button>
+                    </div>
+                </div>
+
+                <!-- Başlat / Sıfırla Butonları -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" id="pomo-start-btn" onclick="togglePomodoro()" class="py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm shadow-indigo-500/25 transition">
+                        <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                        <span>Başlat</span>
+                    </button>
+                    <button type="button" onclick="resetPomodoro()" class="py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Sıfırla</span>
+                    </button>
+                </div>
+
+                <!-- Odak Ortam Sesleri (Web Audio API - İnternetsiz Çalışır) -->
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                            <i data-lucide="headphones" class="w-3.5 h-3.5 text-indigo-500"></i>
+                            Odak Ortam Sesi
+                        </span>
+                        <span id="ambient-status-label" class="text-[10px] font-bold text-slate-400">Kapalı</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button type="button" id="amb-btn-rain" onclick="toggleAmbientSound('rain')" class="py-1.5 px-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold hover:border-indigo-500 transition flex items-center justify-center gap-1">
+                            🌧️ Yağmur
+                        </button>
+                        <button type="button" id="amb-btn-brown" onclick="toggleAmbientSound('brown')" class="py-1.5 px-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold hover:border-indigo-500 transition flex items-center justify-center gap-1">
+                            🌊 Derin Ses
+                        </button>
+                        <button type="button" id="amb-btn-binaural" onclick="toggleAmbientSound('binaural')" class="py-1.5 px-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold hover:border-indigo-500 transition flex items-center justify-center gap-1">
+                            🧠 40Hz Odak
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Aylık Mini Takvim (Trabzonspor Maç Günleri Bordo İşaretli) -->
+            <section class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
+                <div class="flex items-center justify-between">
+                    <h2 id="mini-cal-month-label" class="text-sm font-black text-slate-900 dark:text-white">Kasım 2026</h2>
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="shiftMiniCalendarMonth(-1)" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <button type="button" onclick="shiftMiniCalendarMonth(1)" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-7 text-center text-[10px] font-extrabold text-slate-400">
+                    <span>Pt</span><span>Sa</span><span>Ça</span><span>Pe</span><span>Cu</span><span>Ct</span><span>Pz</span>
+                </div>
+                <div id="mini-calendar-grid" class="grid grid-cols-7 gap-1 text-center"></div>
+                <div class="flex items-center justify-between text-[10px] font-semibold text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> Planlı İş</span>
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#6b1427]"></span> Trabzonspor Maçı</span>
+                </div>
+            </section>
+        </aside>
+
+        <!-- SAĞ PANEL: AKILLI HIZLI EKLEME, YILDIZ 3 HEDEF, LİSTE / HAFTALIK GÖRÜNÜM & GÜN ÖZETİ -->
+        <div class="lg:col-span-8 space-y-4">
+
+            <!-- Doğal Dil Destekli Akıllı Görev Ekleme Kartı + Sesli Dikte -->
+            <section class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
+                <form onsubmit="handleQuickAddTask(event)" class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <div class="relative flex-1">
+                            <input type="text" id="quick-task-input" placeholder='İş yazın... (Örn: "Yarın 19:30 Halı Saha #Spor !acil")' class="w-full pl-4 pr-11 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                            <button type="button" id="voice-dictate-btn" onclick="startVoiceTaskInput()" class="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-xl text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition" title="Mikrofonla Sesli Görev Ekle">
+                                <i data-lucide="mic" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <button type="submit" class="px-4 sm:px-5 py-3 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:opacity-90 text-xs sm:text-sm font-black flex items-center gap-1.5 shadow-sm transition active:scale-95 shrink-0">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Ekle</span>
+                        </button>
+                    </div>
+
+                    <!-- Hızlı Seçenekler Satırı (Kategori, Öncelik, İsteğe Bağlı Saat) -->
+                    <div class="flex flex-wrap items-center gap-2 text-xs">
+                        <select id="quick-category-select" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-200 focus:outline-none">
+                        </select>
+
+                        <select id="quick-priority-select" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-200 focus:outline-none">
+                            <option value="normal">⚪ Rutin</option>
+                            <option value="important">🟡 Önemli</option>
+                            <option value="urgent">🔴 Acil</option>
+                        </select>
+
+                        <button type="button" id="quick-time-toggle-btn" onclick="toggleQuickTimePicker()" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5 transition">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-500"></i>
+                            <span id="quick-time-btn-label">Saat Ekle (İsteğe Bağlı)</span>
+                        </button>
+
+                        <button type="button" onclick="openCategoriesModal()" class="ml-auto text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                            + Kategorileri Düzenle
+                        </button>
+                    </div>
+
+                    <!-- İsteğe Bağlı Hızlı Saat Aralığı Seçici -->
+                    <div id="quick-time-picker-box" class="hidden p-3 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200/70 dark:border-indigo-800/50 flex flex-wrap items-center gap-3 text-xs">
+                        <div class="flex items-center gap-1.5 font-bold">
+                            <span class="text-slate-500 dark:text-slate-400">Başlangıç:</span>
+                            <select id="quick-start-hour" class="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-extrabold"></select>
+                            <span>:</span>
+                            <select id="quick-start-min" class="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-extrabold">
+                                <option value="0">00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1.5 font-bold">
+                            <span class="text-slate-500 dark:text-slate-400">Süre:</span>
+                            <select id="quick-duration-min" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-extrabold">
+                                <option value="30">30 dk</option>
+                                <option value="45">45 dk</option>
+                                <option value="60" selected>1 saat</option>
+                                <option value="90">1.5 saat</option>
+                                <option value="120">2 saat</option>
+                                <option value="180">3 saat</option>
+                            </select>
+                        </div>
+                        <button type="button" onclick="clearQuickTimePicker()" class="ml-auto text-rose-500 font-bold hover:underline">Saati Kaldır</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- GÜNÜN EN ÖNEMLİ 3 YILDIZ HEDEFİ (MIT - Ivy Lee / Things 3 Modeli) -->
+            <section id="mit-showcase-section" class="hidden bg-gradient-to-r from-amber-50/90 via-yellow-50/70 to-amber-50/90 dark:from-amber-950/35 dark:via-slate-900 dark:to-amber-950/35 rounded-3xl p-4 border border-amber-300/70 dark:border-amber-700/50 shadow-xs space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-lg bg-amber-400 text-amber-950 flex items-center justify-center text-xs font-black">⭐</span>
+                        <h3 class="text-xs sm:text-sm font-black text-amber-950 dark:text-amber-200 tracking-tight">Günün En Önemli 3 Yıldız Hedefi (MIT)</h3>
+                    </div>
+                    <span id="mit-count-badge" class="text-[11px] font-extrabold text-amber-700 dark:text-amber-300">0 / 3</span>
+                </div>
+                <div id="mit-tasks-container" class="grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+            </section>
+
+            <!-- GÖRÜNÜM SEKMELERİ (GÜNLÜK LİSTE / HAFTALIK 7 GÜN) & FİLTRELER -->
+            <section class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+                    <!-- Günlük / Haftalık Geçişi -->
+                    <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
+                        <button type="button" id="view-tab-day" onclick="setMainView('day')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-extrabold shadow-xs transition">
+                            Günlük Liste
+                        </button>
+                        <button type="button" id="view-tab-week" onclick="setMainView('week')" class="px-3 py-1.5 rounded-xl text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-slate-900 dark:hover:text-white transition">
+                            Haftalık (7 Gün)
+                        </button>
+                    </div>
+
+                    <!-- Durum Filtreleri & Gün Kopyala -->
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs">
+                            <button type="button" onclick="setStatusFilter('all')" id="filter-btn-all" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 font-extrabold shadow-2xs">Tümü</button>
+                            <button type="button" onclick="setStatusFilter('pending')" id="filter-btn-pending" class="px-2.5 py-1 rounded-lg font-bold text-slate-500">Bekleyen</button>
+                            <button type="button" onclick="setStatusFilter('completed')" id="filter-btn-completed" class="px-2.5 py-1 rounded-lg font-bold text-slate-500">Biten</button>
+                        </div>
+                        <button type="button" onclick="openCopyDayModal()" class="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1 transition" title="Bugünün listesini başka tarihe kopyala">
+                            <i data-lucide="copy" class="w-3.5 h-3.5 text-indigo-500"></i>
+                            <span class="hidden sm:inline">Günü Kopyala</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Arama & Kategori Filtresi -->
+                <div id="day-filter-bar" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="task-search-input" oninput="renderTodoList()" placeholder="Görevlerde, notlarda veya alt maddelerde ara..." class="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <select id="filter-category-select" onchange="renderTodoList()" class="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none">
+                        <option value="all">Tüm Kategoriler</option>
+                    </select>
+                </div>
+
+                <!-- GÜNLÜK LİSTE KONTEYNERİ -->
+                <div id="day-view-container" class="space-y-2.5"></div>
+
+                <!-- HAFTALIK (7 GÜN) KONTEYNERİ -->
+                <div id="week-view-container" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2.5"></div>
+            </section>
+
+            <!-- GÜNÜN ÖZETİ & DEĞERLENDİRME NOTU -->
+            <section class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
+                <div class="flex items-center justify-between">
+                    <label for="daily-reflection-input" class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                        <i data-lucide="notebook-pen" class="w-4 h-4 text-indigo-500"></i>
+                        <span>Günün Özeti & Yarın İçin Not</span>
+                    </label>
+                    <span id="reflection-saved-badge" class="text-[11px] font-bold text-emerald-500 opacity-0 transition-opacity">✓ Kaydedildi</span>
+                </div>
+                <textarea id="daily-reflection-input" rows="2" oninput="onDailyReflectionInput(this.value)" placeholder="Bugün neleri iyi yaptın? Yarın ilk neye odaklanacaksın?" class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+            </section>
+        </div>
+    </main>
+
+    <!-- GÖREV DÜZENLEME MODALI -->
+    <div id="task-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h3 class="text-base font-black text-slate-900 dark:text-white">Görevi Düzenle</h3>
+                <button type="button" onclick="closeTaskModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-5 space-y-4 overflow-y-auto text-xs sm:text-sm">
+                <input type="hidden" id="edit-task-id">
+
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-500 uppercase mb-1">Görev Başlığı</label>
+                    <input type="text" id="edit-task-title" class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-extrabold text-slate-500 uppercase mb-1">Kategori</label>
+                        <select id="edit-task-category" class="w-full px-3 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-extrabold text-slate-500 uppercase mb-1">Öncelik</label>
+                        <select id="edit-task-priority" class="w-full px-3 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold">
+                            <option value="normal">⚪ Rutin</option>
+                            <option value="important">🟡 Önemli</option>
+                            <option value="urgent">🔴 Acil</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-extrabold text-slate-500 uppercase mb-1">Tarih</label>
+                        <input type="date" id="edit-task-date" class="w-full px-3 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold">
+                    </div>
+                    <div class="flex items-end">
+                        <label class="flex items-center gap-2 cursor-pointer p-2.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/50 w-full">
+                            <input type="checkbox" id="edit-task-mit" class="w-4 h-4 rounded text-amber-500">
+                            <span class="text-xs font-extrabold text-amber-900 dark:text-amber-200">⭐ Günün Yıldız Hedefi</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- İsteğe Bağlı Saat Aralığı -->
+                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700 space-y-2.5">
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Bu işe saat aralığı tanımla</span>
+                        <input type="checkbox" id="edit-has-time" onchange="toggleEditTimeFields()" class="w-4 h-4 rounded text-indigo-600">
+                    </label>
+                    <div id="edit-time-fields" class="hidden grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <span class="block text-[11px] font-bold text-slate-400 mb-1">Başlangıç Saati</span>
+                            <div class="flex items-center gap-1">
+                                <select id="edit-start-hour" class="w-full px-2 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-extrabold"></select>
+                                <span>:</span>
+                                <select id="edit-start-min" class="w-full px-2 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-extrabold">
+                                    <option value="0">00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] font-bold text-slate-400 mb-1">Süre</span>
+                            <select id="edit-duration-min" class="w-full px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-extrabold">
+                                <option value="15">15 dk</option>
+                                <option value="30">30 dk</option>
+                                <option value="45">45 dk</option>
+                                <option value="60">1 saat</option>
+                                <option value="90">1.5 saat</option>
+                                <option value="120">2 saat</option>
+                                <option value="180">3 saat</option>
+                                <option value="240">4 saat</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alt Görevler (Checklist) -->
+                <div class="space-y-2">
+                    <label class="block text-xs font-extrabold text-slate-500 uppercase">Alt Maddeler (Checklist)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="new-subtask-input" placeholder="Yeni alt madde ekle..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addSubtaskInModal();}" class="flex-1 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+                        <button type="button" onclick="addSubtaskInModal()" class="px-3 py-2 rounded-xl bg-indigo-600 text-white text-xs font-extrabold">Ekle</button>
+                    </div>
+                    <div id="edit-subtasks-list" class="space-y-1.5 max-h-36 overflow-y-auto"></div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-500 uppercase mb-1">Notlar</label>
+                    <textarea id="edit-task-notes" rows="2" placeholder="Görev detayı veya link..." class="w-full px-3.5 py-2 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium resize-none"></textarea>
+                </div>
+            </div>
+
+            <div class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 bg-slate-50/60 dark:bg-slate-900">
+                <button type="button" onclick="deleteTaskFromModal()" class="px-3.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-xs font-extrabold hover:bg-rose-100 transition">
+                    Görevi Sil
+                </button>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="closeTaskModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold">Vazgeç</button>
+                    <button type="button" onclick="saveTaskFromModal()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-sm">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GÜNLÜK KAPANIŞ RİTÜELİ MODALI (Sunsama Daily Shutdown) -->
+    <div id="shutdown-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            <div class="px-5 py-4 bg-gradient-to-r from-zinc-900 to-indigo-950 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="moon-star" class="w-5 h-5 text-amber-300"></i>
+                    <h3 class="text-base font-black">Günlük Kapanış Ritüeli</h3>
+                </div>
+                <button type="button" onclick="closeShutdownModal()" class="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="shutdown-modal-body" class="p-5 space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- ŞABLON YÖNETİCİSİ MODALI (KPSS & ANTRENMAN) -->
+    <div id="templates-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                    <h3 class="text-base font-black text-slate-900 dark:text-white">KPSS & Antrenman Gün Şablonları</h3>
+                    <p class="text-xs text-slate-500">Hazır şablonları seçili güne uygulayın veya kendi rutininizi düzenleyin.</p>
+                </div>
+                <button type="button" onclick="closeTemplatesModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="templates-modal-body" class="p-5 space-y-4 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- KATEGORİ YÖNETİCİSİ MODALI -->
+    <div id="categories-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h3 class="text-base font-black text-slate-900 dark:text-white">Kategorileri Düzenle</h3>
+                <button type="button" onclick="closeCategoriesModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="categories-modal-body" class="p-5 space-y-4 max-h-[80vh] overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- İSTATİSTİK & YEDEKLEME MODALI -->
+    <div id="stats-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h3 class="text-base font-black text-slate-900 dark:text-white">Haftalık Performans & Veri Yedekleme</h3>
+                <button type="button" onclick="closeStatsModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="stats-modal-body" class="p-5 space-y-4 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- CİHAZ EŞİTLEME MODALI (iPhone & Mac Sync) -->
+    <div id="sync-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="smartphone" class="w-5 h-5 text-emerald-500"></i>
+                    <h3 class="text-base font-black text-slate-900 dark:text-white">iPhone & Mac Eşzamanlama</h3>
+                </div>
+                <button type="button" onclick="closeSyncModal()" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-5 space-y-4 text-xs sm:text-sm">
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Aynı Apple hesabına bağlı <strong>Mac</strong> ve <strong>iPhone</strong> cihazlarınızı eşleştirmek için aşağıdaki kodu kopyalayıp diğer cihazınızda yapıştırın.
+                </p>
+                <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-between gap-2">
+                    <div>
+                        <span class="block text-[10px] font-extrabold uppercase text-slate-400">Bu Cihazın Eşleşme Kodu</span>
+                        <span id="sync-code-display" class="text-base font-black font-mono tracking-wider text-indigo-600 dark:text-indigo-400">AJANDA-000000</span>
+                    </div>
+                    <button type="button" onclick="copySyncCode()" class="px-3 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-xs font-extrabold">Kopyala</button>
+                </div>
+                <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <label class="block text-xs font-extrabold text-slate-500 uppercase">Başka Cihazdan Kod Gir</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="sync-code-input" placeholder="Örn: AJANDA-8492AB" class="flex-1 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono font-bold uppercase text-xs">
+                        <button type="button" onclick="pairDeviceWithCode()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold">Eşleştir</button>
+                    </div>
+                </div>
+                <div id="sync-status-banner" class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+                    ✓ Bulut senkronizasyonu aktif. Değişiklikler otomatik eşitlenir.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GÜN KOPYALAMA MODALI -->
+    <div id="copy-day-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-base font-black">Günü Başka Tarihe Kopyala</h3>
+                <button type="button" onclick="closeCopyDayModal()" class="p-1 rounded-lg text-slate-400"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <p class="text-xs text-slate-500">Seçili gündeki tüm yapılacaklar hedef tarihe kopyalanacak:</p>
+            <input type="date" id="copy-target-date" class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-sm">
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeCopyDayModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold">İptal</button>
+                <button type="button" onclick="executeCopyDay()" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-extrabold">Kopyala</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRABZONSPOR FİKSTÜR MODALI -->
+    <div id="ts-fixture-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
+            <div class="px-5 py-4 bg-gradient-to-r from-[#6b1427] to-[#123d5e] text-white flex items-center justify-between">
+                <div>
+                    <h3 class="text-base font-black">Trabzonspor 2026-2027 Fikstürü</h3>
+                    <p class="text-[11px] text-white/80">İlgili güne gitmek için maçın üzerine tıklayın</p>
+                </div>
+                <button type="button" onclick="closeTsFixtureModal()" class="p-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="ts-fixture-list" class="p-4 space-y-2 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- TAM EKRAN ODAK MODU (ZEN MODE) -->
+    <div id="zen-mode-overlay" class="hidden fixed inset-0 z-50 bg-zinc-950 text-white flex flex-col justify-between p-6 sm:p-10">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-400">Derin Odak Modu (Zen)</span>
+            </div>
+            <button type="button" onclick="closeZenMode()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold flex items-center gap-1.5">
+                <span>Çıkış (ESC)</span>
+            </button>
+        </div>
+
+        <div class="max-w-xl w-full mx-auto text-center space-y-6">
+            <div>
+                <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Şu An Odaklanılan Görev</label>
+                <select id="zen-task-select" onchange="onZenTaskSelectChange(this.value)" class="w-full px-4 py-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-sm sm:text-base font-extrabold text-white focus:outline-none focus:border-indigo-500">
+                </select>
+            </div>
+
+            <div id="zen-pomo-display" class="text-6xl sm:text-8xl font-black font-mono tracking-tight text-white">25:00</div>
+
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <button type="button" id="zen-start-btn" onclick="togglePomodoro()" class="px-7 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-black shadow-lg shadow-indigo-600/30 transition">
+                    Başlat
+                </button>
+                <button type="button" onclick="resetPomodoro()" class="px-5 py-3.5 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-bold transition">
+                    Sıfırla
+                </button>
+                <button type="button" onclick="completeZenActiveTask()" class="px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-extrabold transition">
+                    ✓ Görevi Tamamla
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-zinc-500">
+            Bildirimler susturuldu • Sadece tek bir işe odaklan
+        </div>
+    </div>
+
+    <!-- BİLDİRİM TOAST -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 pointer-events-none flex flex-col gap-2"></div>
+
+    <script>
+        // =========================================================================
+        // 1. SABİTLER, RENK PALETLERİ, VARSAYILAN ŞABLONLAR & TRABZONSPOR FİKSTÜRÜ
+        // =========================================================================
+        const STORAGE_KEY = 'ajandapro_black_state_v3';
+
+        const COLOR_STYLES = {
+            indigo:  { name: 'İndigo',  bg: 'bg-indigo-50 dark:bg-indigo-950/50',   text: 'text-indigo-700 dark:text-indigo-300',   border: 'border-l-indigo-500',  dot: 'bg-indigo-500' },
+            emerald: { name: 'Zümrüt',  bg: 'bg-emerald-50 dark:bg-emerald-950/50', text: 'text-emerald-700 dark:text-emerald-300', border: 'border-l-emerald-500', dot: 'bg-emerald-500' },
+            amber:   { name: 'Kehribar',bg: 'bg-amber-50 dark:bg-amber-950/50',     text: 'text-amber-700 dark:text-amber-300',     border: 'border-l-amber-500',   dot: 'bg-amber-500' },
+            rose:    { name: 'Gül',     bg: 'bg-rose-50 dark:bg-rose-950/50',       text: 'text-rose-700 dark:text-rose-300',       border: 'border-l-rose-500',    dot: 'bg-rose-500' },
+            sky:     { name: 'Gökyüzü', bg: 'bg-sky-50 dark:bg-sky-950/50',         text: 'text-sky-700 dark:text-sky-300',         border: 'border-l-sky-500',     dot: 'bg-sky-500' },
+            purple:  { name: 'Mor',     bg: 'bg-purple-50 dark:bg-purple-950/50',   text: 'text-purple-700 dark:text-purple-300',   border: 'border-l-purple-500',  dot: 'bg-purple-500' },
+            slate:   { name: 'Antrasit',bg: 'bg-slate-100 dark:bg-slate-800',       text: 'text-slate-700 dark:text-slate-300',     border: 'border-l-slate-500',   dot: 'bg-slate-500' }
+        };
+
+        const DEFAULT_CATEGORIES = [
+            { id: 'kpss',     name: 'Ders / KPSS', color: 'indigo' },
+            { id: 'sport',    name: 'Spor / Antrenman', color: 'emerald' },
+            { id: 'dev',      name: 'Yazılım & Proje', color: 'sky' },
+            { id: 'personal', name: 'Kişisel & Rutin', color: 'amber' },
+            { id: 'meeting',  name: 'Toplantı / Sosyal', color: 'purple' }
+        ];
+
+        const DEFAULT_TEMPLATES = [
+            {
+                id: 'tpl_kpss',
+                name: 'KPSS Yoğun Çalışma Günü',
+                desc: 'Sabah paragraf/matematik, öğleden sonra genel kültür ve akşam soru çözümü',
+                items: [
+                    { title: 'KPSS Paragraf & Problem Rutini (40 Soru)', category: 'kpss', priority: 'urgent', startMin: 540, durationMin: 90, isMit: true },
+                    { title: 'KPSS Tarih / Coğrafya Konu Tekrarı', category: 'kpss', priority: 'important', startMin: 660, durationMin: 120, isMit: true },
+                    { title: 'Deneme Analizi & Yanlış Defteri', category: 'kpss', priority: 'normal', startMin: 900, durationMin: 90, isMit: false }
+                ]
+            },
+            {
+                id: 'tpl_sport',
+                name: 'Antrenman & Halı Saha Günü',
+                desc: 'Beslenme zamanlaması, mobilite ısınma ve akşam maç/antrenman planı',
+                items: [
+                    { title: '45 Dk Full-Body Kuvvet & Mobilite', category: 'sport', priority: 'important', startMin: 600, durationMin: 45, isMit: true },
+                    { title: 'Halı Saha Maçı', category: 'sport', priority: 'urgent', startMin: 1200, durationMin: 60, isMit: true }
+                ]
+            },
+            {
+                id: 'tpl_dev',
+                name: 'Derin Odak Yazılım Günü',
+                desc: 'Sabah mimari geliştirme, öğleden sonra test ve dokümantasyon',
+                items: [
+                    { title: 'Ana Özellik Geliştirme (Deep Work)', category: 'dev', priority: 'urgent', startMin: 570, durationMin: 150, isMit: true },
+                    { title: 'Hata Ayıklama & Performans Kontrolü', category: 'dev', priority: 'important', startMin: 840, durationMin: 90, isMit: false }
+                ]
+            }
+        ];
+
+        const TRABZONSPOR_MATCHES = [
+            { date: '2026-11-26', time: '23:00', home: 'CSKA Sofya', away: 'Trabzonspor', league: 'UEFA Konferans Ligi', venue: 'Bulgaristan Ordu Stadyumu • Sofya' },
+            { date: '2026-11-30', time: '19:00', home: 'Göztepe', away: 'Trabzonspor', league: 'Trendyol Süper Lig', venue: 'Gürsel Aksel Stadyumu • İzmir' },
+            { date: '2026-12-06', time: '20:00', home: 'Trabzonspor', away: 'Başakşehir FK', league: 'Trendyol Süper Lig', venue: 'Papara Park • Trabzon' },
+            { date: '2026-12-10', time: '20:45', home: 'Trabzonspor', away: 'Rapid Wien', league: 'UEFA Konferans Ligi', venue: 'Papara Park • Trabzon' },
+            { date: '2026-12-14', time: '19:00', home: 'Samsunspor', away: 'Trabzonspor', league: 'Trendyol Süper Lig', venue: 'Samsun Yeni 19 Mayıs Stadyumu' },
+            { date: '2026-12-20', time: '20:00', home: 'Trabzonspor', away: 'Beşiktaş', league: 'Trendyol Süper Lig', venue: 'Papara Park • Trabzon' },
+            { date: '2027-01-10', time: '19:00', home: 'Konyaspor', away: 'Trabzonspor', league: 'Trendyol Süper Lig', venue: 'MEDAŞ Konya Büyükşehir Stadyumu' },
+            { date: '2027-01-17', time: '20:00', home: 'Trabzonspor', away: 'Fenerbahçe', league: 'Trendyol Süper Lig', venue: 'Papara Park • Trabzon' }
+        ];
+
+        // =========================================================================
+        // 2. UYGULAMA DURUMU (STATE)
+        // =========================================================================
+        let appData = {
+            tasks: [],
+            categories: [...DEFAULT_CATEGORIES],
+            templates: JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)),
+            waterByDate: {},
+            waterGoalMl: 2400,
+            reflectionsByDate: {},
+            syncCode: ''
+        };
+
+        let selectedDate = formatDateISO(new Date());
+        let miniCalYear = new Date().getFullYear();
+        let miniCalMonth = new Date().getMonth();
+        let mainViewMode = 'day'; // 'day' | 'week'
+        let statusFilter = 'all'; // 'all' | 'pending' | 'completed'
+        let draggedTaskId = null;
+        let weeklyDraggedTaskId = null;
+
+        // Pomodoro Durumu
+        let pomoTotalSeconds = 25 * 60;
+        let pomoRemainingSeconds = 25 * 60;
+        let pomoInterval = null;
+        let pomoRunning = false;
+        let pomoActiveTaskId = null;
+
+        // Ortam Sesi (Web Audio API)
+        let audioCtx = null;
+        let activeAmbientNode = null;
+        let activeAmbientType = null;
+
+        // =========================================================================
+        // 3. YARDIMCI TARİH & METİN FONKSİYONLARI
+        // =========================================================================
+        function formatDateISO(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        function parseISODate(iso) {
+            const [y, m, d] = iso.split('-').map(Number);
+            return new Date(y, m - 1, d);
+        }
+
+        function formatTurkishDateLong(iso) {
+            const d = parseISODate(iso);
+            return d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
+        }
+
+        function minutesToHHMM(totalMin) {
+            const h = Math.floor(totalMin / 60) % 24;
+            const m = totalMin % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        function generateId(prefix = 'id') {
+            return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getCategoryObj(catId) {
+            return appData.categories.find(c => c.id === catId) || appData.categories[0] || { id: 'personal', name: 'Genel', color: 'indigo' };
+        }
+
+        function getCategoryStyle(catId) {
+            const cat = getCategoryObj(catId);
+            return COLOR_STYLES[cat.color] || COLOR_STYLES.indigo;
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const el = document.createElement('div');
+            el.className = 'px-4 py-2.5 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-xs font-extrabold shadow-xl border border-white/10 transition-all duration-300';
+            el.textContent = msg;
+            container.appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            }, 2600);
+        }
+
+        // =========================================================================
+        // 4. VERİ KAYDETME, YÜKLEME & CİHAZ SENKRONİZASYONU
+        // =========================================================================
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    appData = {
+                        tasks: Array.isArray(parsed.tasks) ? parsed.tasks : [],
+                        categories: Array.isArray(parsed.categories) && parsed.categories.length ? parsed.categories : [...DEFAULT_CATEGORIES],
+                        templates: Array.isArray(parsed.templates) && parsed.templates.length ? parsed.templates : JSON.parse(JSON.stringify(DEFAULT_TEMPLATES)),
+                        waterByDate: parsed.waterByDate || {},
+                        waterGoalMl: parsed.waterGoalMl || 2400,
+                        reflectionsByDate: parsed.reflectionsByDate || {},
+                        syncCode: parsed.syncCode || ''
+                    };
+                } else {
+                    seedInitialDemoTasks();
+                }
+            } catch (e) {
+                console.error('Veri yükleme hatası:', e);
+                seedInitialDemoTasks();
+            }
+
+            if (!appData.syncCode) {
+                appData.syncCode = 'AJANDA-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                saveState();
+            }
+        }
+
+        function seedInitialDemoTasks() {
+            const today = formatDateISO(new Date());
+            appData.tasks = [
+                {
+                    id: generateId('task'),
+                    title: 'KPSS Paragraf & Problem Çözümü (40 Soru)',
+                    category: 'kpss',
+                    priority: 'urgent',
+                    date: today,
+                    startMin: 600,
+                    durationMin: 90,
+                    completed: false,
+                    isMit: true,
+                    order: 0,
+                    focusedMinutes: 0,
+                    notes: 'Süre tutarak çöz, yanlışları analiz et.',
+                    subtasks: [
+                        { id: generateId('sub'), text: '20 Paragraf sorusu', done: true },
+                        { id: generateId('sub'), text: '20 Sayısal mantık & problem', done: false }
+                    ]
+                },
+                {
+                    id: generateId('task'),
+                    title: '45 Dk Full-Body Antrenman',
+                    category: 'sport',
+                    priority: 'important',
+                    date: today,
+                    startMin: 1080,
+                    durationMin: 45,
+                    completed: false,
+                    isMit: true,
+                    order: 1,
+                    focusedMinutes: 0,
+                    notes: '',
+                    subtasks: []
+                }
+            ];
+            saveState();
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                if (appData.syncCode) {
+                    localStorage.setItem('ajandapro_cloud_' + appData.syncCode, JSON.stringify({
+                        updatedAt: Date.now(),
+                        payload: appData
+                    }));
+                }
+            } catch (e) {
+                console.error('Kayıt hatası:', e);
+            }
+        }
+
+        // =========================================================================
+        // 5. TEMA & TARİH GEZİNTİSİ
+        // =========================================================================
+        function initTheme() {
+            const saved = localStorage.getItem('ajandapro_theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = saved ? saved === 'dark' : prefersDark;
+            document.documentElement.classList.toggle('dark', isDark);
+            updateThemeIcon(isDark);
+        }
+
+        function toggleTheme() {
+            const isDark = !document.documentElement.classList.contains('dark');
+            document.documentElement.classList.toggle('dark', isDark);
+            localStorage.setItem('ajandapro_theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            const icon = document.getElementById('theme-icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+                lucide.createIcons();
+            }
+        }
+
+        function onDatePickerChange(newIso) {
+            if (!newIso) return;
+            selectedDate = newIso;
+            const d = parseISODate(selectedDate);
+            miniCalYear = d.getFullYear();
+            miniCalMonth = d.getMonth();
+            renderAll();
+        }
+
+        function shiftSelectedDate(days) {
+            const d = parseISODate(selectedDate);
+            d.setDate(d.getDate() + days);
+            onDatePickerChange(formatDateISO(d));
+        }
+
+        function goToToday() {
+            onDatePickerChange(formatDateISO(new Date()));
+        }
+
+        // =========================================================================
+        // 6. TRABZONSPOR MAÇ ŞERİDİ & HALI SAHA BESLENME REHBERİ
+        // =========================================================================
+        function getTrabzonsporMatchForDate(iso) {
+            return TRABZONSPOR_MATCHES.find(m => m.date === iso) || null;
+        }
+
+        function renderTrabzonsporBanner() {
+            const banner = document.getElementById('ts-match-banner');
+            if (!banner) return;
+            const match = getTrabzonsporMatchForDate(selectedDate);
+            if (!match) {
+                banner.classList.add('hidden');
+                return;
+            }
+            document.getElementById('ts-match-league').textContent = match.league;
+            document.getElementById('ts-match-time').textContent = `Saat ${match.time}`;
+            document.getElementById('ts-match-title').textContent = `${match.home} - ${match.away}`;
+            document.getElementById('ts-match-venue').textContent = match.venue;
+
+            updateTrabzonsporCountdown(match);
+
+            const alreadyAdded = appData.tasks.some(t => t.date === selectedDate && t.title.includes(match.home) && t.title.includes(match.away));
+            const addBtn = document.getElementById('ts-add-task-btn');
+            if (addBtn) {
+                addBtn.innerHTML = alreadyAdded
+                    ? `<i data-lucide="check" class="w-3.5 h-3.5"></i><span>Ajandada Ekli</span>`
+                    : `<i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i><span>Ajandama Ekle</span>`;
+            }
+            banner.classList.remove('hidden');
+        }
+
+        function updateTrabzonsporCountdown(matchObj = null) {
+            const cdEl = document.getElementById('ts-match-countdown');
+            if (!cdEl) return;
+            const match = matchObj || getTrabzonsporMatchForDate(selectedDate);
+            if (!match) {
+                cdEl.classList.add('hidden');
+                return;
+            }
+            const [y, m, d] = match.date.split('-').map(Number);
+            const [hh, mm] = match.time.split(':').map(Number);
+            const matchTime = new Date(y, m - 1, d, hh, mm, 0);
+            const now = new Date();
+            const diffMs = matchTime.getTime() - now.getTime();
+
+            if (diffMs > 0) {
+                const totalMins = Math.floor(diffMs / 60000);
+                const days = Math.floor(totalMins / (60 * 24));
+                const hours = Math.floor((totalMins % (60 * 24)) / 60);
+                const mins = totalMins % 60;
+                const parts = [];
+                if (days > 0) parts.push(`${days} gün`);
+                if (hours > 0) parts.push(`${hours} sa`);
+                parts.push(`${mins} dk`);
+                cdEl.textContent = `⏱ Başlamasına ${parts.join(' ')} kaldı`;
+                cdEl.classList.remove('hidden');
+            } else if (diffMs >= -120 * 60000) {
+                cdEl.textContent = '🔴 Maç Şu An Oynanıyor!';
+                cdEl.classList.remove('hidden');
+            } else {
+                cdEl.textContent = '✓ Maç Tamamlandı';
+                cdEl.classList.remove('hidden');
+            }
+        }
+
+        function addTrabzonsporMatchToTasks() {
+            const match = getTrabzonsporMatchForDate(selectedDate);
+            if (!match) return;
+            const title = `⚽ ${match.home} - ${match.away} (${match.league})`;
+            if (appData.tasks.some(t => t.date === selectedDate && t.title === title)) {
+                showToast('Trabzonspor maçı zaten bugünkü ajandanda ekli!');
+                return;
+            }
+            const [hh, mm] = match.time.split(':').map(Number);
+            appData.tasks.push({
+                id: generateId('task'),
+                title,
+                category: 'meeting',
+                priority: 'important',
+                date: selectedDate,
+                startMin: hh * 60 + mm,
+                durationMin: 120,
+                completed: false,
+                isMit: false,
+                order: getSortedDayTasks(selectedDate).length,
+                focusedMinutes: 0,
+                notes: match.venue,
+                subtasks: []
+            });
+            saveState();
+            renderAll();
+            showToast('Trabzonspor maçı ajandana eklendi!');
+        }
+
+        function openTsFixtureModal() {
+            const list = document.getElementById('ts-fixture-list');
+            list.innerHTML = TRABZONSPOR_MATCHES.map(m => {
+                const isSel = m.date === selectedDate;
+                return `
+                    <button type="button" onclick="closeTsFixtureModal(); onDatePickerChange('${m.date}');" class="w-full text-left p-3 rounded-2xl border ${isSel ? 'border-[#6b1427] bg-[#6b1427]/10' : 'border-slate-200 dark:border-slate-800 hover:border-[#6b1427]'} flex items-center justify-between gap-2 transition">
+                        <div>
+                            <div class="text-[11px] font-extrabold text-[#6b1427] dark:text-[#fda4af]">${formatTurkishDateLong(m.date)} • ${m.time}</div>
+                            <div class="text-sm font-black text-slate-900 dark:text-white">${escapeHtml(m.home)} - ${escapeHtml(m.away)}</div>
+                            <div class="text-[11px] text-slate-500">${escapeHtml(m.league)} • ${escapeHtml(m.venue)}</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                    </button>
+                `;
+            }).join('');
+            document.getElementById('ts-fixture-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeTsFixtureModal() {
+            document.getElementById('ts-fixture-modal').classList.add('hidden');
+        }
+
+        function getHaliSahaTaskForDay(dateISO = selectedDate) {
+            return getSortedDayTasks(dateISO).find(t => {
+                const norm = (t.title || '').toLocaleLowerCase('tr-TR');
+                return norm.includes('halı saha') || norm.includes('halisaha');
+            }) || null;
+        }
+
+        function renderHaliSahaPrepBanner() {
+            const banner = document.getElementById('halisaha-prep-banner');
+            if (!banner) return;
+            const hsTask = getHaliSahaTaskForDay(selectedDate);
+            if (!hsTask) {
+                banner.classList.add('hidden');
+                return;
+            }
+            const timeBadge = document.getElementById('halisaha-match-time-badge');
+            if (timeBadge) {
+                if (typeof hsTask.startMin === 'number') {
+                    const eatMin = Math.max(0, hsTask.startMin - 210);
+                    const snackMin = Math.max(0, hsTask.startMin - 45);
+                    timeBadge.textContent = `Maç: ${minutesToHHMM(hsTask.startMin)} • Ana Öğün: ~${minutesToHHMM(eatMin)} • Muz/Kahve: ~${minutesToHHMM(snackMin)}`;
+                } else {
+                    timeBadge.textContent = `Görev: ${hsTask.title}`;
+                }
+            }
+            banner.classList.remove('hidden');
+        }
+
+        function addHaliSahaChecklistToTask() {
+            const hsTask = getHaliSahaTaskForDay(selectedDate);
+            if (!hsTask) return;
+            if (!Array.isArray(hsTask.subtasks)) hsTask.subtasks = [];
+            const items = [
+                'Maçtan 3.5 saat önce karbonhidrat + hafif protein öğünü',
+                'Gün içinde en az 2.5 L su tüket',
+                'Maçtan 45 dk önce 1 muz + sade kahve',
+                'Maç öncesi 10 dk dinamik ısınma & esneme',
+                'Krampon, çorap ve yedek tişört çantaya koy'
+            ];
+            let added = 0;
+            items.forEach(txt => {
+                if (!hsTask.subtasks.some(s => s.text === txt)) {
+                    hsTask.subtasks.push({ id: generateId('sub'), text: txt, done: false });
+                    added++;
+                }
+            });
+            saveState();
+            renderAll();
+            showToast(added > 0 ? `${added} hazırlık maddesi halı saha görevine eklendi!` : 'Hazırlık maddeleri zaten görevde ekli.');
+        }
+
+        // =========================================================================
+        // 7. DOĞAL DİL İLE AKILLI HIZLI GÖREV EKLEME & SESLİ DİKTE
+        // =========================================================================
+        function parseNaturalLanguageTask(rawText) {
+            let text = rawText.trim();
+            let targetDate = selectedDate;
+            let startMin = null;
+            let durationMin = 60;
+            let category = document.getElementById('quick-category-select').value;
+            let priority = document.getElementById('quick-priority-select').value;
+
+            // Yarın / Bugün algılama
+            if (/\byarın\b/i.test(text)) {
+                const d = parseISODate(selectedDate);
+                d.setDate(d.getDate() + 1);
+                targetDate = formatDateISO(d);
+                text = text.replace(/\byarın\b/gi, '').trim();
+            } else if (/\bbugün\b/i.test(text)) {
+                targetDate = formatDateISO(new Date());
+                text = text.replace(/\bbugün\b/gi, '').trim();
+            }
+
+            // Saat algılama (Örn: 19:30 veya 14.00)
+            const timeMatch = text.match(/\b([01]?\d|2[0-3])[:.]([0-5]\d)\b/);
+            if (timeMatch) {
+                startMin = parseInt(timeMatch[1], 10) * 60 + parseInt(timeMatch[2], 10);
+                text = text.replace(timeMatch[0], '').trim();
+            }
+
+            // Öncelik etiketleri (!acil, !önemli)
+            if (/!acil\b/i.test(text)) {
+                priority = 'urgent';
+                text = text.replace(/!acil\b/gi, '').trim();
+            } else if (/!(önemli|onemli)\b/i.test(text)) {
+                priority = 'important';
+                text = text.replace(/!(önemli|onemli)\b/gi, '').trim();
+            }
+
+            // #Kategori etiketi
+            const tagMatch = text.match(/#([a-zA-ZçğıöşüÇĞİÖŞÜ0-9_-]+)/);
+            if (tagMatch) {
+                const q = tagMatch[1].toLocaleLowerCase('tr-TR');
+                const foundCat = appData.categories.find(c => c.name.toLocaleLowerCase('tr-TR').includes(q) || c.id.toLocaleLowerCase('tr-TR').includes(q));
+                if (foundCat) category = foundCat.id;
+                text = text.replace(tagMatch[0], '').trim();
+            }
+
+            // Kullanıcı manuel saat seçtiyse onu uygula
+            const manualTimeBox = document.getElementById('quick-time-picker-box');
+            if (manualTimeBox && !manualTimeBox.classList.contains('hidden') && startMin === null) {
+                const sh = parseInt(document.getElementById('quick-start-hour').value, 10);
+                const sm = parseInt(document.getElementById('quick-start-min').value, 10);
+                startMin = sh * 60 + sm;
+                durationMin = parseInt(document.getElementById('quick-duration-min').value, 10) || 60;
+            }
+
+            return {
+                title: text.replace(/\s{2,}/g, ' ').trim(),
+                date: targetDate,
+                startMin,
+                durationMin,
+                category,
+                priority
+            };
+        }
+
+        function handleQuickAddTask(e) {
+            e.preventDefault();
+            const input = document.getElementById('quick-task-input');
+            const raw = input.value.trim();
+            if (!raw) return;
+
+            const parsed = parseNaturalLanguageTask(raw);
+            if (!parsed.title) return;
+
+            const newTask = {
+                id: generateId('task'),
+                title: parsed.title,
+                category: parsed.category,
+                priority: parsed.priority,
+                date: parsed.date,
+                startMin: parsed.startMin,
+                durationMin: parsed.durationMin,
+                completed: false,
+                isMit: false,
+                order: getSortedDayTasks(parsed.date).length,
+                focusedMinutes: 0,
+                notes: '',
+                subtasks: []
+            };
+
+            appData.tasks.push(newTask);
+            input.value = '';
+            saveState();
+
+            if (parsed.date !== selectedDate) {
+                showToast(`Görev ${formatTurkishDateLong(parsed.date)} tarihine eklendi!`);
+            } else {
+                showToast('Görev listeye eklendi');
+            }
+            renderAll();
+        }
+
+        function startVoiceTaskInput() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showToast('Tarayıcınız sesli dikteyi desteklemiyor.');
+                return;
+            }
+            const btn = document.getElementById('voice-dictate-btn');
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.interimResults = false;
+
+            btn.classList.add('text-rose-500', 'animate-pulse');
+            showToast('Dinliyorum... Görevinizi söyleyin');
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const input = document.getElementById('quick-task-input');
+                input.value = transcript;
+                btn.classList.remove('text-rose-500', 'animate-pulse');
+                showToast('Ses metne çevrildi, eklemek için Enter’a basın.');
+                input.focus();
+            };
+            recognition.onerror = () => {
+                btn.classList.remove('text-rose-500', 'animate-pulse');
+                showToast('Ses algılanamadı, tekrar deneyin.');
+            };
+            recognition.onend = () => {
+                btn.classList.remove('text-rose-500', 'animate-pulse');
+            };
+            recognition.start();
+        }
+
+        function toggleQuickTimePicker() {
+            const box = document.getElementById('quick-time-picker-box');
+            box.classList.toggle('hidden');
+            const lbl = document.getElementById('quick-time-btn-label');
+            lbl.textContent = box.classList.contains('hidden') ? 'Saat Ekle (İsteğe Bağlı)' : 'Saat Seçili';
+        }
+
+        function clearQuickTimePicker() {
+            document.getElementById('quick-time-picker-box').classList.add('hidden');
+            document.getElementById('quick-time-btn-label').textContent = 'Saat Ekle (İsteğe Bağlı)';
+        }
+
+        // =========================================================================
+        // 8. GÖREV LİSTELEME, YILDIZ 3 HEDEF (MIT), SÜRÜKLE-BIRAK & HAFTALIK GÖRÜNÜM
+        // =========================================================================
+        function getSortedDayTasks(dateISO) {
+            return appData.tasks
+                .filter(t => t.date === dateISO)
+                .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        }
+
+        function toggleTaskMit(taskId) {
+            const task = appData.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            if (!task.isMit) {
+                const currentMits = getSortedDayTasks(task.date).filter(t => t.isMit);
+                if (currentMits.length >= 3) {
+                    showToast('Günde en fazla 3 Yıldız Hedef (MIT) seçebilirsiniz!');
+                    return;
+                }
+            }
+            task.isMit = !task.isMit;
+            saveState();
+            renderAll();
+        }
+
+        function renderMitShowcase() {
+            const section = document.getElementById('mit-showcase-section');
+            const container = document.getElementById('mit-tasks-container');
+            const badge = document.getElementById('mit-count-badge');
+            if (!section || !container) return;
+
+            const mits = getSortedDayTasks(selectedDate).filter(t => t.isMit);
+            if (mits.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            badge.textContent = `${mits.filter(m => m.completed).length} / ${mits.length} Tamamlandı`;
+
+            container.innerHTML = mits.map(t => `
+                <div class="p-3 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-amber-200 dark:border-amber-800/60 flex items-center justify-between gap-2 shadow-2xs">
+                    <button type="button" onclick="toggleTaskComplete('${t.id}')" class="flex items-center gap-2 text-left min-w-0 flex-1">
+                        <span class="w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-amber-400'}">
+                            ${t.completed ? '✓' : ''}
+                        </span>
+                        <span class="text-xs font-extrabold truncate ${t.completed ? 'line-through opacity-50' : 'text-slate-900 dark:text-white'}">${escapeHtml(t.title)}</span>
+                    </button>
+                    <button type="button" onclick="toggleTaskMit('${t.id}')" class="text-amber-500 hover:text-slate-400 text-xs" title="Yıldızdan Çıkar">⭐</button>
+                </div>
+            `).join('');
+        }
+
+        function renderTodoList() {
+            const container = document.getElementById('day-view-container');
+            if (!container) return;
+
+            let tasks = getSortedDayTasks(selectedDate);
+            const query = (document.getElementById('task-search-input')?.value || '').trim().toLocaleLowerCase('tr-TR');
+            const catFilter = document.getElementById('filter-category-select')?.value || 'all';
+
+            if (statusFilter === 'pending') tasks = tasks.filter(t => !t.completed);
+            if (statusFilter === 'completed') tasks = tasks.filter(t => t.completed);
+            if (catFilter !== 'all') tasks = tasks.filter(t => t.category === catFilter);
+            if (query) {
+                tasks = tasks.filter(t => {
+                    const inTitle = (t.title || '').toLocaleLowerCase('tr-TR').includes(query);
+                    const inNotes = (t.notes || '').toLocaleLowerCase('tr-TR').includes(query);
+                    const inSub = (t.subtasks || []).some(s => s.text.toLocaleLowerCase('tr-TR').includes(query));
+                    return inTitle || inNotes || inSub;
+                });
+            }
+
+            if (tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 px-4 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 space-y-2">
+                        <p class="text-sm font-extrabold text-slate-600 dark:text-slate-300">Bu görünümde gösterilecek görev yok</p>
+                        <p class="text-xs text-slate-400">Yukarıdan yeni bir iş ekleyebilir veya hazır KPSS/Antrenman şablonlarını uygulayabilirsiniz.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = tasks.map(t => {
+                const cat = getCategoryObj(t.category);
+                const st = getCategoryStyle(t.category);
+                const prioBadge = t.priority === 'urgent'
+                    ? '<span class="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-300 text-[10px] font-extrabold">🔴 Acil</span>'
+                    : (t.priority === 'important'
+                        ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-[10px] font-extrabold">🟡 Önemli</span>'
+                        : '');
+
+                const timeTag = typeof t.startMin === 'number'
+                    ? `<span class="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-[11px] font-extrabold flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-indigo-500"></i>${minutesToHHMM(t.startMin)} - ${minutesToHHMM(t.startMin + (t.durationMin || 60))}</span>`
+                    : '';
+
+                const subs = Array.isArray(t.subtasks) ? t.subtasks : [];
+                const subHtml = subs.length > 0 ? `
+                    <div class="mt-2 pl-7 space-y-1">
+                        ${subs.map(s => `
+                            <button type="button" onclick="toggleSubtaskDone('${t.id}', '${s.id}')" class="flex items-center gap-2 text-left text-xs ${s.done ? 'line-through text-slate-400' : 'text-slate-600 dark:text-slate-300'} hover:text-indigo-500">
+                                <span class="w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px] ${s.done ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 dark:border-slate-600'}">${s.done ? '✓' : ''}</span>
+                                <span>${escapeHtml(s.text)}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                ` : '';
+
+                return `
+                    <div draggable="true"
+                         ondragstart="onTaskDragStart(event, '${t.id}')"
+                         ondragover="onTaskDragOver(event)"
+                         ondragleave="onTaskDragLeave(event)"
+                         ondrop="onTaskDrop(event, '${t.id}')"
+                         class="group p-3.5 rounded-2xl bg-white dark:bg-slate-800/75 border border-slate-200/80 dark:border-slate-700/80 border-l-4 ${st.border} hover:shadow-md transition-all">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-start gap-2.5 min-w-0 flex-1">
+                                <span class="cursor-grab text-slate-300 dark:text-slate-600 hover:text-slate-500 pt-0.5 select-none" title="Sıralamak için sürükle">⋮⋮</span>
+                                <button type="button" onclick="toggleTaskComplete('${t.id}')" class="mt-0.5 w-5 h-5 rounded-lg border-2 flex items-center justify-center shrink-0 transition ${t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 dark:border-slate-600 hover:border-indigo-500'}">
+                                    ${t.completed ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+                                </button>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex flex-wrap items-center gap-1.5">
+                                        <span class="text-sm font-extrabold ${t.completed ? 'line-through text-slate-400' : 'text-slate-900 dark:text-white'}">${escapeHtml(t.title)}</span>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${st.bg} ${st.text}">${escapeHtml(cat.name)}</span>
+                                        ${prioBadge}
+                                        ${timeTag}
+                                        ${t.focusedMinutes > 0 ? `<span class="text-[10px] font-bold text-indigo-500">⏱ ${t.focusedMinutes} dk odak</span>` : ''}
+                                    </div>
+                                    ${t.notes ? `<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(t.notes)}</p>` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Kart Hızlı İşlem Butonları -->
+                            <div class="flex items-center gap-1 shrink-0">
+                                <button type="button" onclick="toggleTaskMit('${t.id}')" class="p-1.5 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-950/60 transition ${t.isMit ? 'opacity-100' : 'opacity-40 hover:opacity-100'}" title="Günün Yıldız Hedefi (MIT)">
+                                    ⭐
+                                </button>
+                                <button type="button" onclick="startPomodoroForTask('${t.id}')" class="p-1.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-950 text-indigo-600 dark:text-indigo-400 transition" title="Bu İş İçin Odak Sayacı Başlat">
+                                    <i data-lucide="play-circle" class="w-4 h-4"></i>
+                                </button>
+                                <button type="button" onclick="postponeTaskToTomorrow('${t.id}')" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition" title="Yarına Ertele">
+                                    <i data-lucide="calendar-arrow-up" class="w-4 h-4"></i>
+                                </button>
+                                <button type="button" onclick="duplicateTask('${t.id}')" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition" title="Görevi Çoğalt">
+                                    <i data-lucide="copy-plus" class="w-4 h-4"></i>
+                                </button>
+                                <button type="button" onclick="openTaskModal('${t.id}')" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition" title="Düzenle">
+                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        ${subHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function onTaskDragStart(e, id) {
+            draggedTaskId = id;
+            e.dataTransfer.effectAllowed = 'move';
+        }
+        function onTaskDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('task-card-drag-over');
+        }
+        function onTaskDragLeave(e) {
+            e.currentTarget.classList.remove('task-card-drag-over');
+        }
+        function onTaskDrop(e, targetId) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('task-card-drag-over');
+            if (!draggedTaskId || draggedTaskId === targetId) return;
+
+            const dayTasks = getSortedDayTasks(selectedDate);
+            const fromIdx = dayTasks.findIndex(t => t.id === draggedTaskId);
+            const toIdx = dayTasks.findIndex(t => t.id === targetId);
+            if (fromIdx === -1 || toIdx === -1) return;
+
+            const [moved] = dayTasks.splice(fromIdx, 1);
+            dayTasks.splice(toIdx, 0, moved);
+            dayTasks.forEach((t, idx) => { t.order = idx; });
+
+            saveState();
+            renderAll();
+        }
+
+        function toggleTaskComplete(id) {
+            const task = appData.tasks.find(t => t.id === id);
+            if (!task) return;
+            task.completed = !task.completed;
+            saveState();
+            renderAll();
+        }
+
+        function toggleSubtaskDone(taskId, subId) {
+            const task = appData.tasks.find(t => t.id === taskId);
+            if (!task || !Array.isArray(task.subtasks)) return;
+            const sub = task.subtasks.find(s => s.id === subId);
+            if (sub) sub.done = !sub.done;
+            saveState();
+            renderAll();
+        }
+
+        function postponeTaskToTomorrow(id) {
+            const task = appData.tasks.find(t => t.id === id);
+            if (!task) return;
+            const d = parseISODate(task.date);
+            d.setDate(d.getDate() + 1);
+            task.date = formatDateISO(d);
+            task.order = getSortedDayTasks(task.date).length;
+            saveState();
+            renderAll();
+            showToast('Görev yarına ertelendi');
+        }
+
+        function duplicateTask(id) {
+            const task = appData.tasks.find(t => t.id === id);
+            if (!task) return;
+            const copy = JSON.parse(JSON.stringify(task));
+            copy.id = generateId('task');
+            copy.completed = false;
+            copy.order = getSortedDayTasks(task.date).length;
+            appData.tasks.push(copy);
+            saveState();
+            renderAll();
+            showToast('Görev çoğaltıldı');
+        }
+
+        function setStatusFilter(filter) {
+            statusFilter = filter;
+            ['all', 'pending', 'completed'].forEach(f => {
+                const btn = document.getElementById(`filter-btn-${f}`);
+                if (!btn) return;
+                if (f === filter) {
+                    btn.className = 'px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 font-extrabold shadow-2xs';
+                } else {
+                    btn.className = 'px-2.5 py-1 rounded-lg font-bold text-slate-500';
+                }
+            });
+            renderTodoList();
+        }
+
+        function setMainView(mode) {
+            mainViewMode = mode;
+            const dayTab = document.getElementById('view-tab-day');
+            const weekTab = document.getElementById('view-tab-week');
+            const dayCont = document.getElementById('day-view-container');
+            const weekCont = document.getElementById('week-view-container');
+            const filterBar = document.getElementById('day-filter-bar');
+
+            if (mode === 'day') {
+                dayTab.className = 'px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-extrabold shadow-xs transition';
+                weekTab.className = 'px-3 py-1.5 rounded-xl text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-slate-900 dark:hover:text-white transition';
+                dayCont.classList.remove('hidden');
+                filterBar.classList.remove('hidden');
+                weekCont.classList.add('hidden');
+                renderTodoList();
+            } else {
+                weekTab.className = 'px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-extrabold shadow-xs transition';
+                dayTab.className = 'px-3 py-1.5 rounded-xl text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-slate-900 dark:hover:text-white transition';
+                dayCont.classList.add('hidden');
+                filterBar.classList.add('hidden');
+                weekCont.classList.remove('hidden');
+                renderWeeklyView();
+            }
+        }
+
+        function renderWeeklyView() {
+            const container = document.getElementById('week-view-container');
+            if (!container) return;
+            const cur = parseISODate(selectedDate);
+            const dayOfWeek = (cur.getDay() + 6) % 7; // Pazartesi = 0
+            const monday = new Date(cur);
+            monday.setDate(cur.getDate() - dayOfWeek);
+            const dayNames = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+
+            let html = '';
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                const iso = formatDateISO(d);
+                const isSel = iso === selectedDate;
+                const tasks = getSortedDayTasks(iso);
+                const tsMatch = getTrabzonsporMatchForDate(iso);
+
+                let colBorder = 'border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/60';
+                if (tsMatch) {
+                    colBorder = 'border-[#6b1427] bg-[#6b1427]/10 dark:bg-[#6b1427]/25';
+                } else if (isSel) {
+                    colBorder = 'border-indigo-500 bg-indigo-50/30 dark:bg-indigo-950/20';
+                }
+
+                html += `
+                    <div ondragover="event.preventDefault()"
+                         ondrop="onWeeklyDayDrop(event, '${iso}')"
+                         class="rounded-2xl border ${colBorder} p-2.5 flex flex-col gap-2 min-h-[260px]">
+                        <button type="button" onclick="onDatePickerChange('${iso}'); setMainView('day');" class="flex items-center justify-between pb-1.5 border-b ${tsMatch ? 'border-[#6b1427]/30' : 'border-slate-200/70 dark:border-slate-800'} text-left">
+                            <span class="text-xs font-extrabold ${tsMatch ? 'text-[#6b1427] dark:text-[#fda4af]' : (isSel ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-200')}">${dayNames[i]} ${d.getDate()}</span>
+                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white dark:bg-slate-800 text-slate-500">${tasks.length}</span>
+                        </button>
+                        ${tsMatch ? `
+                            <div onclick="onDatePickerChange('${iso}'); setMainView('day');" class="p-2 rounded-xl bg-gradient-to-r from-[#6b1427] to-[#123d5e] text-white text-[10px] font-extrabold cursor-pointer shadow-xs">
+                                <div class="flex items-center justify-between text-[#9be0ff]">
+                                    <span>⚽ TS MAÇI</span>
+                                    <span>${tsMatch.time}</span>
+                                </div>
+                                <div class="truncate mt-0.5">${escapeHtml(tsMatch.home)} - ${escapeHtml(tsMatch.away)}</div>
+                            </div>
+                        ` : ''}
+                        <div class="space-y-1.5 flex-1">
+                            ${tasks.map(t => {
+                                const st = getCategoryStyle(t.category);
+                                return `
+                                    <div draggable="true"
+                                         ondragstart="weeklyDraggedTaskId='${t.id}'"
+                                         onclick="onDatePickerChange('${iso}'); openTaskModal('${t.id}');"
+                                         class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 border-l-4 ${st.border} text-[11px] font-bold cursor-pointer hover:shadow-xs ${t.completed ? 'line-through opacity-60' : ''}">
+                                        ${escapeHtml(t.title)}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function onWeeklyDayDrop(e, targetIso) {
+            e.preventDefault();
+            if (!weeklyDraggedTaskId) return;
+            const task = appData.tasks.find(t => t.id === weeklyDraggedTaskId);
+            if (task) {
+                task.date = targetIso;
+                task.order = getSortedDayTasks(targetIso).length;
+                saveState();
+                renderAll();
+                showToast('Görev yeni güne taşındı');
+            }
+            weeklyDraggedTaskId = null;
+        }
+
+        // =========================================================================
+        // 9. SOL PANEL: İLERLEME, SU SAYACI & AYLIK TAKVİM
+        // =========================================================================
+        function renderProgressAndSidebar() {
+            document.getElementById('header-date-picker').value = selectedDate;
+            document.getElementById('selected-date-label').textContent = formatTurkishDateLong(selectedDate);
+
+            const todayIso = formatDateISO(new Date());
+            document.getElementById('selected-date-sub').textContent = selectedDate === todayIso ? 'Bugünün aktif planı' : 'Seçili gün planı';
+
+            const tasks = getSortedDayTasks(selectedDate);
+            const completedCount = tasks.filter(t => t.completed).length;
+            const pct = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
+
+            document.getElementById('completion-badge').textContent = `%${pct}`;
+            document.getElementById('completion-bar').style.width = `${pct}%`;
+            document.getElementById('tasks-count-label').textContent = `${completedCount} / ${tasks.length} görev tamamlandı`;
+
+            const totalMin = tasks.reduce((acc, t) => acc + (typeof t.startMin === 'number' ? (t.durationMin || 60) : 0), 0);
+            const totalHours = (totalMin / 60).toFixed(1).replace('.0', '');
+            document.getElementById('total-hours-label').textContent = `${totalHours} sa saatli plan`;
+
+            const burnoutEl = document.getElementById('burnout-warning');
+            if (totalMin > 480) {
+                document.getElementById('burnout-warning-text').textContent = `Bugün ${totalHours} saatlik iş planladın, kendine dinlenme molası bırak.`;
+                burnoutEl.classList.remove('hidden');
+            } else {
+                burnoutEl.classList.add('hidden');
+            }
+
+            // Günlük Not
+            const refInput = document.getElementById('daily-reflection-input');
+            if (refInput) {
+                refInput.value = appData.reflectionsByDate[selectedDate] || '';
+            }
+        }
+
+        function onDailyReflectionInput(val) {
+            appData.reflectionsByDate[selectedDate] = val;
+            saveState();
+            const badge = document.getElementById('reflection-saved-badge');
+            if (badge) {
+                badge.style.opacity = '1';
+                clearTimeout(window._refTimer);
+                window._refTimer = setTimeout(() => { badge.style.opacity = '0'; }, 1500);
+            }
+        }
+
+        function renderWaterTracker() {
+            const ml = appData.waterByDate[selectedDate] || 0;
+            const goal = appData.waterGoalMl || 2400;
+            const glasses = Math.round(ml / 200);
+            const pct = Math.min(100, Math.round((ml / goal) * 100));
+
+            document.getElementById('water-ml-value').textContent = ml;
+            document.getElementById('water-goal-ml').textContent = goal;
+            document.getElementById('water-glasses-label').textContent = `${glasses} bardak (200 ml) • Hedef ${(goal / 1000).toFixed(1)} L`;
+            document.getElementById('water-progress-bar').style.width = `${pct}%`;
+        }
+
+        function adjustWater(deltaMl) {
+            const cur = appData.waterByDate[selectedDate] || 0;
+            appData.waterByDate[selectedDate] = Math.max(0, cur + deltaMl);
+            saveState();
+            renderWaterTracker();
+            if (deltaMl > 0) showToast(`+200 ml su eklendi! Toplam: ${appData.waterByDate[selectedDate]} ml`);
+        }
+
+        function cycleWaterGoal() {
+            const goals = [2000, 2400, 3000, 3600];
+            const idx = goals.indexOf(appData.waterGoalMl);
+            appData.waterGoalMl = goals[(idx + 1) % goals.length];
+            saveState();
+            renderWaterTracker();
+            showToast(`Günlük su hedefi ${(appData.waterGoalMl / 1000).toFixed(1)} L yapıldı`);
+        }
+
+        function shiftMiniCalendarMonth(delta) {
+            miniCalMonth += delta;
+            if (miniCalMonth < 0) { miniCalMonth = 11; miniCalYear--; }
+            if (miniCalMonth > 11) { miniCalMonth = 0; miniCalYear++; }
+            renderMiniCalendar();
+        }
+
+        function renderMiniCalendar() {
+            const grid = document.getElementById('mini-calendar-grid');
+            const label = document.getElementById('mini-cal-month-label');
+            if (!grid || !label) return;
+
+            const monthNames = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            label.textContent = `${monthNames[miniCalMonth]} ${miniCalYear}`;
+
+            const firstDay = new Date(miniCalYear, miniCalMonth, 1);
+            const startOffset = (firstDay.getDay() + 6) % 7;
+            const daysInMonth = new Date(miniCalYear, miniCalMonth + 1, 0).getDate();
+            const todayIso = formatDateISO(new Date());
+
+            let cells = '';
+            for (let i = 0; i < startOffset; i++) {
+                cells += '<div></div>';
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const iso = `${miniCalYear}-${String(miniCalMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isSelected = iso === selectedDate;
+                const isToday = iso === todayIso;
+                const hasTasks = appData.tasks.some(t => t.date === iso);
+                const tsMatch = getTrabzonsporMatchForDate(iso);
+
+                let btnClass = 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800';
+                let titleAttr = '';
+                if (tsMatch) {
+                    btnClass = isSelected
+                        ? 'bg-[#6b1427] text-white ring-2 ring-[#38bdf8] font-black shadow-sm'
+                        : 'bg-[#6b1427]/15 dark:bg-[#6b1427]/45 text-[#6b1427] dark:text-[#fda4af] border border-[#6b1427]/50 font-black';
+                    titleAttr = `title="⚽ ${tsMatch.home} - ${tsMatch.away} (${tsMatch.time})"`;
+                } else if (isSelected) {
+                    btnClass = 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 font-black shadow-xs';
+                } else if (isToday) {
+                    btnClass = 'border border-indigo-500 text-indigo-600 dark:text-indigo-400 font-extrabold';
+                }
+
+                cells += `
+                    <button type="button" ${titleAttr} onclick="onDatePickerChange('${iso}')" class="relative h-8 rounded-xl text-xs flex flex-col items-center justify-center transition ${btnClass}">
+                        <span>${day}</span>
+                        ${hasTasks && !tsMatch ? `<span class="w-1 h-1 rounded-full ${isSelected ? 'bg-emerald-400' : 'bg-indigo-500'} mt-0.5"></span>` : ''}
+                    </button>
+                `;
+            }
+            grid.innerHTML = cells;
+        }
+
+        // =========================================================================
+        // 10. POMODORO ODAK SAYACI, ORTAM SESLERİ & ZEN MODU
+        // =========================================================================
+        function updatePomodoroDisplays() {
+            const m = Math.floor(pomoRemainingSeconds / 60);
+            const s = pomoRemainingSeconds % 60;
+            const formatted = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            const d1 = document.getElementById('pomo-display');
+            const d2 = document.getElementById('zen-pomo-display');
+            if (d1) d1.textContent = formatted;
+            if (d2) d2.textContent = formatted;
+
+            const btnText = pomoRunning ? 'Duraklat' : 'Başlat';
+            const b1 = document.getElementById('pomo-start-btn');
+            const b2 = document.getElementById('zen-start-btn');
+            if (b1) b1.innerHTML = `<i data-lucide="${pomoRunning ? 'pause' : 'play'}" class="w-3.5 h-3.5"></i><span>${btnText}</span>`;
+            if (b2) b2.textContent = btnText;
+            lucide.createIcons();
+        }
+
+        function setPomodoroPreset(minutes) {
+            if (pomoRunning) togglePomodoro();
+            pomoTotalSeconds = minutes * 60;
+            pomoRemainingSeconds = pomoTotalSeconds;
+            updatePomodoroDisplays();
+        }
+
+        function toggleCustomPomoPanel() {
+            document.getElementById('custom-pomo-panel').classList.toggle('hidden');
+        }
+
+        function applyCustomPomoDuration() {
+            const m = Math.max(0, parseInt(document.getElementById('custom-pomo-min').value, 10) || 0);
+            const s = Math.max(0, Math.min(59, parseInt(document.getElementById('custom-pomo-sec').value, 10) || 0));
+            const total = m * 60 + s;
+            if (total <= 0) {
+                showToast('Lütfen geçerli bir süre girin');
+                return;
+            }
+            if (pomoRunning) togglePomodoro();
+            pomoTotalSeconds = total;
+            pomoRemainingSeconds = total;
+            document.getElementById('custom-pomo-panel').classList.add('hidden');
+            updatePomodoroDisplays();
+            showToast(`Sayaç ${m} dk ${s} sn olarak ayarlandı`);
+        }
+
+        function startPomodoroForTask(taskId) {
+            const task = appData.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            pomoActiveTaskId = taskId;
+            document.getElementById('pomo-task-label').textContent = task.title;
+            if (!pomoRunning) togglePomodoro();
+            showToast(`"${task.title}" için odak sayacı başladı`);
+        }
+
+        function togglePomodoro() {
+            if (pomoRunning) {
+                clearInterval(pomoInterval);
+                pomoRunning = false;
+                updatePomodoroDisplays();
+                return;
+            }
+            pomoRunning = true;
+            updatePomodoroDisplays();
+            pomoInterval = setInterval(() => {
+                if (pomoRemainingSeconds > 0) {
+                    pomoRemainingSeconds--;
+                    updatePomodoroDisplays();
+                } else {
+                    clearInterval(pomoInterval);
+                    pomoRunning = false;
+                    onPomodoroComplete();
+                }
+            }, 1000);
+        }
+
+        function resetPomodoro() {
+            clearInterval(pomoInterval);
+            pomoRunning = false;
+            pomoRemainingSeconds = pomoTotalSeconds;
+            updatePomodoroDisplays();
+        }
+
+        function onPomodoroComplete() {
+            playBeepChime();
+            const focusedMins = Math.max(1, Math.round(pomoTotalSeconds / 60));
+            if (pomoActiveTaskId) {
+                const task = appData.tasks.find(t => t.id === pomoActiveTaskId);
+                if (task) {
+                    task.focusedMinutes = (task.focusedMinutes || 0) + focusedMins;
+                    saveState();
+                    renderAll();
+                }
+            }
+            pomoRemainingSeconds = pomoTotalSeconds;
+            updatePomodoroDisplays();
+            showToast(`🎉 Odak süresi tamamlandı! (+${focusedMins} dk kaydedildi)`);
+        }
+
+        function playBeepChime() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(660, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.6);
+            } catch (e) {}
+        }
+
+        // Web Audio API Ortam Sesleri (Yağmur / Derin Ses / 40Hz Odak)
+        function toggleAmbientSound(type) {
+            if (activeAmbientType === type) {
+                stopAmbientSound();
+                return;
+            }
+            stopAmbientSound();
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.value = 0.06;
+                gainNode.connect(audioCtx.destination);
+
+                if (type === 'binaural') {
+                    const osc1 = audioCtx.createOscillator();
+                    const osc2 = audioCtx.createOscillator();
+                    osc1.frequency.value = 200;
+                    osc2.frequency.value = 240; // 40 Hz Gamma Odak
+                    osc1.connect(gainNode);
+                    osc2.connect(gainNode);
+                    osc1.start();
+                    osc2.start();
+                    activeAmbientNode = { stop: () => { osc1.stop(); osc2.stop(); } };
+                } else {
+                    const bufferSize = audioCtx.sampleRate * 2;
+                    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    let lastOut = 0;
+                    for (let i = 0; i < bufferSize; i++) {
+                        const white = Math.random() * 2 - 1;
+                        if (type === 'brown') {
+                            data[i] = (lastOut + (0.02 * white)) / 1.02;
+                            lastOut = data[i];
+                            data[i] *= 2.5;
+                        } else {
+                            data[i] = white * 0.45;
+                        }
+                    }
+                    const noise = audioCtx.createBufferSource();
+                    noise.buffer = buffer;
+                    noise.loop = true;
+                    noise.connect(gainNode);
+                    noise.start();
+                    activeAmbientNode = noise;
+                }
+
+                activeAmbientType = type;
+                updateAmbientButtonsUI();
+            } catch (e) {
+                showToast('Ses başlatılamadı');
+            }
+        }
+
+        function stopAmbientSound() {
+            if (activeAmbientNode) {
+                try { activeAmbientNode.stop(); } catch (e) {}
+                activeAmbientNode = null;
+            }
+            activeAmbientType = null;
+            updateAmbientButtonsUI();
+        }
+
+        function updateAmbientButtonsUI() {
+            const labels = { rain: 'Yağmur Açık', brown: 'Derin Ses Açık', binaural: '40Hz Odak Açık' };
+            document.getElementById('ambient-status-label').textContent = activeAmbientType ? labels[activeAmbientType] : 'Kapalı';
+            ['rain', 'brown', 'binaural'].forEach(t => {
+                const btn = document.getElementById(`amb-btn-${t}`);
+                if (!btn) return;
+                if (t === activeAmbientType) {
+                    btn.className = 'py-1.5 px-2 rounded-xl bg-indigo-600 text-white border border-indigo-600 text-[11px] font-extrabold transition flex items-center justify-center gap-1';
+                } else {
+                    btn.className = 'py-1.5 px-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold hover:border-indigo-500 transition flex items-center justify-center gap-1';
+                }
+            });
+        }
+
+        // Tam Ekran Odak Modu (Zen Mode)
+        function openZenMode() {
+            const sel = document.getElementById('zen-task-select');
+            const tasks = getSortedDayTasks(selectedDate).filter(t => !t.completed);
+            sel.innerHTML = `<option value="">Serbest Odak Oturumu</option>` +
+                tasks.map(t => `<option value="${t.id}" ${t.id === pomoActiveTaskId ? 'selected' : ''}>${escapeHtml(t.title)}</option>`).join('');
+            document.getElementById('zen-mode-overlay').classList.remove('hidden');
+            updatePomodoroDisplays();
+        }
+
+        function closeZenMode() {
+            document.getElementById('zen-mode-overlay').classList.add('hidden');
+        }
+
+        function onZenTaskSelectChange(val) {
+            pomoActiveTaskId = val || null;
+            const task = appData.tasks.find(t => t.id === pomoActiveTaskId);
+            document.getElementById('pomo-task-label').textContent = task ? task.title : 'Serbest Odak Oturumu';
+        }
+
+        function completeZenActiveTask() {
+            if (!pomoActiveTaskId) {
+                showToast('Önce listeden bir görev seçin');
+                return;
+            }
+            toggleTaskComplete(pomoActiveTaskId);
+            showToast('✓ Görev tamamlandı!');
+            openZenMode();
+        }
+
+        // =========================================================================
+        // 11. GÜNLÜK KAPANIŞ RİTÜELİ (SUNSAMA MODELİ)
+        // =========================================================================
+        function openShutdownModal() {
+            const tasks = getSortedDayTasks(selectedDate);
+            const done = tasks.filter(t => t.completed);
+            const pending = tasks.filter(t => !t.completed);
+            const totalFocused = tasks.reduce((a, t) => a + (t.focusedMinutes || 0), 0);
+            const water = appData.waterByDate[selectedDate] || 0;
+
+            const body = document.getElementById('shutdown-modal-body');
+            body.innerHTML = `
+                <div class="grid grid-cols-3 gap-2.5 text-center">
+                    <div class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50">
+                        <div class="text-xl font-black text-emerald-600">${done.length}/${tasks.length}</div>
+                        <div class="text-[11px] font-bold text-slate-500">Tamamlanan</div>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50">
+                        <div class="text-xl font-black text-indigo-600">${totalFocused} dk</div>
+                        <div class="text-[11px] font-bold text-slate-500">Odak Süresi</div>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-sky-50 dark:bg-sky-950/50">
+                        <div class="text-xl font-black text-sky-600">${(water / 1000).toFixed(1)} L</div>
+                        <div class="text-[11px] font-bold text-slate-500">Su Tüketimi</div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-xs font-extrabold uppercase text-slate-500">1. Yarım Kalan İşler (${pending.length})</h4>
+                    ${pending.length === 0 ? `<p class="text-xs text-emerald-600 font-bold">Harika! Bugün yarım kalan işin kalmadı.</p>` : `
+                        <div class="space-y-1.5 max-h-36 overflow-y-auto">
+                            ${pending.map(t => `
+                                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-between gap-2 text-xs">
+                                    <span class="font-bold truncate">${escapeHtml(t.title)}</span>
+                                    <button type="button" onclick="postponeTaskToTomorrow('${t.id}'); openShutdownModal();" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-extrabold shrink-0">Yarına Aktar</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+
+                <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <h4 class="text-xs font-extrabold uppercase text-slate-500">2. Yarının 1 Numaralı Ana Hedefi (MIT)</h4>
+                    <div class="flex gap-2">
+                        <input type="text" id="shutdown-tomorrow-mit" placeholder="Yarın ilk yapacağım en önemli iş..." class="flex-1 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+                        <button type="button" onclick="finishDailyShutdown()" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-xs font-black">Günü Kapat</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('shutdown-modal').classList.remove('hidden');
+        }
+
+        function closeShutdownModal() {
+            document.getElementById('shutdown-modal').classList.add('hidden');
+        }
+
+        function finishDailyShutdown() {
+            const mitInput = document.getElementById('shutdown-tomorrow-mit');
+            const title = (mitInput?.value || '').trim();
+            if (title) {
+                const d = parseISODate(selectedDate);
+                d.setDate(d.getDate() + 1);
+                const tomorrowIso = formatDateISO(d);
+                appData.tasks.push({
+                    id: generateId('task'),
+                    title,
+                    category: appData.categories[0]?.id || 'kpss',
+                    priority: 'urgent',
+                    date: tomorrowIso,
+                    startMin: null,
+                    durationMin: 60,
+                    completed: false,
+                    isMit: true,
+                    order: 0,
+                    focusedMinutes: 0,
+                    notes: 'Günlük kapanış ritüelinde belirlendi',
+                    subtasks: []
+                });
+                saveState();
+            }
+            closeShutdownModal();
+            renderAll();
+            showToast('🌙 Günün defteri kapatıldı, iyi dinlenmeler!');
+        }
+
+        // =========================================================================
+        // 12. GÖREV DÜZENLEME MODALI, ŞABLONLAR, KATEGORİLER & İSTATİSTİK
+        // =========================================================================
+        let modalTempSubtasks = [];
+
+        function populateCategorySelects() {
+            const opts = appData.categories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+            const qSel = document.getElementById('quick-category-select');
+            const eSel = document.getElementById('edit-task-category');
+            const fSel = document.getElementById('filter-category-select');
+            if (qSel) qSel.innerHTML = opts;
+            if (eSel) eSel.innerHTML = opts;
+            if (fSel) fSel.innerHTML = `<option value="all">Tüm Kategoriler</option>` + opts;
+
+            // Saat seçicileri (00 - 23)
+            const hourOpts = Array.from({ length: 24 }, (_, i) => `<option value="${i}">${String(i).padStart(2, '0')}</option>`).join('');
+            const qHour = document.getElementById('quick-start-hour');
+            const eHour = document.getElementById('edit-start-hour');
+            if (qHour && !qHour.innerHTML) { qHour.innerHTML = hourOpts; qHour.value = '9'; }
+            if (eHour && !eHour.innerHTML) { eHour.innerHTML = hourOpts; }
+        }
+
+        function openTaskModal(id) {
+            const task = appData.tasks.find(t => t.id === id);
+            if (!task) return;
+            document.getElementById('edit-task-id').value = task.id;
+            document.getElementById('edit-task-title').value = task.title;
+            document.getElementById('edit-task-category').value = task.category;
+            document.getElementById('edit-task-priority').value = task.priority || 'normal';
+            document.getElementById('edit-task-date').value = task.date;
+            document.getElementById('edit-task-mit').checked = !!task.isMit;
+            document.getElementById('edit-task-notes').value = task.notes || '';
+
+            const hasTime = typeof task.startMin === 'number';
+            document.getElementById('edit-has-time').checked = hasTime;
+            toggleEditTimeFields();
+            if (hasTime) {
+                document.getElementById('edit-start-hour').value = Math.floor(task.startMin / 60);
+                document.getElementById('edit-start-min').value = task.startMin % 60;
+                document.getElementById('edit-duration-min').value = task.durationMin || 60;
+            }
+
+            modalTempSubtasks = JSON.parse(JSON.stringify(task.subtasks || []));
+            renderModalSubtasks();
+            document.getElementById('task-modal').classList.remove('hidden');
+        }
+
+        function closeTaskModal() {
+            document.getElementById('task-modal').classList.add('hidden');
+        }
+
+        function toggleEditTimeFields() {
+            const checked = document.getElementById('edit-has-time').checked;
+            document.getElementById('edit-time-fields').classList.toggle('hidden', !checked);
+        }
+
+        function renderModalSubtasks() {
+            const list = document.getElementById('edit-subtasks-list');
+            list.innerHTML = modalTempSubtasks.map((s, idx) => `
+                <div class="flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs">
+                    <span class="${s.done ? 'line-through text-slate-400' : 'font-semibold'}">${escapeHtml(s.text)}</span>
+                    <button type="button" onclick="modalTempSubtasks.splice(${idx},1); renderModalSubtasks();" class="text-rose-500 font-bold">Sil</button>
+                </div>
+            `).join('');
+        }
+
+        function addSubtaskInModal() {
+            const inp = document.getElementById('new-subtask-input');
+            const val = inp.value.trim();
+            if (!val) return;
+            modalTempSubtasks.push({ id: generateId('sub'), text: val, done: false });
+            inp.value = '';
+            renderModalSubtasks();
+        }
+
+        function saveTaskFromModal() {
+            const id = document.getElementById('edit-task-id').value;
+            const task = appData.tasks.find(t => t.id === id);
+            if (!task) return;
+
+            const title = document.getElementById('edit-task-title').value.trim();
+            if (!title) return;
+
+            task.title = title;
+            task.category = document.getElementById('edit-task-category').value;
+            task.priority = document.getElementById('edit-task-priority').value;
+            task.date = document.getElementById('edit-task-date').value || task.date;
+            task.isMit = document.getElementById('edit-task-mit').checked;
+            task.notes = document.getElementById('edit-task-notes').value;
+            task.subtasks = modalTempSubtasks;
+
+            if (document.getElementById('edit-has-time').checked) {
+                const h = parseInt(document.getElementById('edit-start-hour').value, 10) || 0;
+                const m = parseInt(document.getElementById('edit-start-min').value, 10) || 0;
+                task.startMin = h * 60 + m;
+                task.durationMin = parseInt(document.getElementById('edit-duration-min').value, 10) || 60;
+            } else {
+                task.startMin = null;
+            }
+
+            saveState();
+            closeTaskModal();
+            renderAll();
+            showToast('Görev güncellendi');
+        }
+
+        function deleteTaskFromModal() {
+            const id = document.getElementById('edit-task-id').value;
+            appData.tasks = appData.tasks.filter(t => t.id !== id);
+            saveState();
+            closeTaskModal();
+            renderAll();
+            showToast('Görev silindi');
+        }
+
+        // Şablonlar Modalı
+        function openTemplatesModal() {
+            const body = document.getElementById('templates-modal-body');
+            body.innerHTML = `
+                <div class="space-y-3">
+                    ${appData.templates.map(tpl => `
+                        <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/50 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <div>
+                                    <h4 class="text-sm font-black text-slate-900 dark:text-white">${escapeHtml(tpl.name)}</h4>
+                                    <p class="text-xs text-slate-500">${escapeHtml(tpl.desc || '')}</p>
+                                </div>
+                                <button type="button" onclick="applyTemplateToSelectedDate('${tpl.id}')" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shrink-0">
+                                    Bugüne Uygula
+                                </button>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-1">
+                                ${tpl.items.map(it => `<span class="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[11px] font-bold">${typeof it.startMin === 'number' ? minutesToHHMM(it.startMin) + ' • ' : ''}${escapeHtml(it.title)}</span>`).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <button type="button" onclick="saveCurrentDayAsTemplate()" class="px-3.5 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-xs font-extrabold">
+                        + Bugünün Planını Şablon Kaydet
+                    </button>
+                    <button type="button" onclick="resetDefaultTemplates()" class="text-xs font-bold text-slate-400 hover:text-rose-500">Varsayılanlara Sıfırla</button>
+                </div>
+            `;
+            document.getElementById('templates-modal').classList.remove('hidden');
+        }
+
+        function closeTemplatesModal() {
+            document.getElementById('templates-modal').classList.add('hidden');
+        }
+
+        function applyTemplateToSelectedDate(tplId) {
+            const tpl = appData.templates.find(t => t.id === tplId);
+            if (!tpl) return;
+            let baseOrder = getSortedDayTasks(selectedDate).length;
+            tpl.items.forEach(it => {
+                appData.tasks.push({
+                    id: generateId('task'),
+                    title: it.title,
+                    category: it.category,
+                    priority: it.priority || 'normal',
+                    date: selectedDate,
+                    startMin: typeof it.startMin === 'number' ? it.startMin : null,
+                    durationMin: it.durationMin || 60,
+                    completed: false,
+                    isMit: !!it.isMit,
+                    order: baseOrder++,
+                    focusedMinutes: 0,
+                    notes: '',
+                    subtasks: []
+                });
+            });
+            saveState();
+            closeTemplatesModal();
+            renderAll();
+            showToast(`"${tpl.name}" şablonu uygulandı!`);
+        }
+
+        function saveCurrentDayAsTemplate() {
+            const dayTasks = getSortedDayTasks(selectedDate);
+            if (dayTasks.length === 0) {
+                showToast('Önce bugüne en az bir görev ekleyin');
+                return;
+            }
+            appData.templates.push({
+                id: generateId('tpl'),
+                name: `Özel Plan (${selectedDate})`,
+                desc: `${dayTasks.length} görevlik kayıtlı gün şablonu`,
+                items: dayTasks.map(t => ({
+                    title: t.title,
+                    category: t.category,
+                    priority: t.priority,
+                    startMin: t.startMin,
+                    durationMin: t.durationMin,
+                    isMit: t.isMit
+                }))
+            });
+            saveState();
+            openTemplatesModal();
+            showToast('Bugünün planı şablon olarak kaydedildi!');
+        }
+
+        function resetDefaultTemplates() {
+            appData.templates = JSON.parse(JSON.stringify(DEFAULT_TEMPLATES));
+            saveState();
+            openTemplatesModal();
+            showToast('Şablonlar sıfırlandı');
+        }
+
+        // Kategoriler Modalı
+        function openCategoriesModal() {
+            const body = document.getElementById('categories-modal-body');
+            body.innerHTML = `
+                <div class="space-y-2">
+                    ${appData.categories.map(c => {
+                        const st = getCategoryStyle(c.id);
+                        return `
+                            <div class="flex items-center justify-between gap-2 p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full ${st.dot}"></span>
+                                    <span class="text-xs font-extrabold">${escapeHtml(c.name)}</span>
+                                </div>
+                                ${appData.categories.length > 1 ? `<button type="button" onclick="deleteCategory('${c.id}')" class="text-xs font-bold text-rose-500">Sil</button>` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+                    <input type="text" id="new-cat-name" placeholder="Yeni kategori adı..." class="flex-1 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold">
+                    <select id="new-cat-color" class="px-2.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold">
+                        ${Object.entries(COLOR_STYLES).map(([k, v]) => `<option value="${k}">${v.name}</option>`).join('')}
+                    </select>
+                    <button type="button" onclick="addNewCategory()" class="px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-extrabold">Ekle</button>
+                </div>
+            `;
+            document.getElementById('categories-modal').classList.remove('hidden');
+        }
+
+        function closeCategoriesModal() {
+            document.getElementById('categories-modal').classList.add('hidden');
+        }
+
+        function addNewCategory() {
+            const name = document.getElementById('new-cat-name').value.trim();
+            const color = document.getElementById('new-cat-color').value;
+            if (!name) return;
+            appData.categories.push({ id: generateId('cat'), name, color });
+            saveState();
+            populateCategorySelects();
+            openCategoriesModal();
+            renderAll();
+        }
+
+        function deleteCategory(id) {
+            appData.categories = appData.categories.filter(c => c.id !== id);
+            saveState();
+            populateCategorySelects();
+            openCategoriesModal();
+            renderAll();
+        }
+
+        // İstatistik & Yedekleme Modalı
+        function openStatsModal() {
+            const totalTasks = appData.tasks.length;
+            const doneTasks = appData.tasks.filter(t => t.completed).length;
+            const totalFocus = appData.tasks.reduce((a, t) => a + (t.focusedMinutes || 0), 0);
+            const waterValues = Object.values(appData.waterByDate);
+            const avgWater = waterValues.length ? Math.round(waterValues.reduce((a, b) => a + b, 0) / waterValues.length) : 0;
+
+            const body = document.getElementById('stats-modal-body');
+            body.innerHTML = `
+                <div class="grid grid-cols-3 gap-3 text-center">
+                    <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800">
+                        <div class="text-xl font-black text-indigo-600">${doneTasks}/${totalTasks}</div>
+                        <div class="text-[11px] font-bold text-slate-500">Toplam Biten İş</div>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800">
+                        <div class="text-xl font-black text-emerald-600">${totalFocus} dk</div>
+                        <div class="text-[11px] font-bold text-slate-500">Odak Süresi</div>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800">
+                        <div class="text-xl font-black text-sky-600">${(avgWater / 1000).toFixed(1)} L</div>
+                        <div class="text-[11px] font-bold text-slate-500">Günlük Ort. Su</div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-xs font-extrabold uppercase text-slate-500">Kategori Dağılımı</h4>
+                    ${appData.categories.map(c => {
+                        const cnt = appData.tasks.filter(t => t.category === c.id).length;
+                        const pct = totalTasks ? Math.round((cnt / totalTasks) * 100) : 0;
+                        const st = getCategoryStyle(c.id);
+                        return `
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span>${escapeHtml(c.name)}</span>
+                                    <span>${cnt} görev (%${pct})</span>
+                                </div>
+                                <div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full ${st.dot}" style="width:${pct}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-2">
+                    <button type="button" onclick="exportBackupJson()" class="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-xs font-extrabold">JSON Yedek İndir</button>
+                    <label class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-extrabold cursor-pointer">
+                        JSON Yedek Yükle
+                        <input type="file" accept=".json" onchange="importBackupJson(event)" class="hidden">
+                    </label>
+                </div>
+            `;
+            document.getElementById('stats-modal').classList.remove('hidden');
+        }
+
+        function closeStatsModal() {
+            document.getElementById('stats-modal').classList.add('hidden');
+        }
+
+        function exportBackupJson() {
+            const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `AjandaPro-Yedek-${selectedDate}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importBackupJson(e) {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const parsed = JSON.parse(reader.result);
+                    if (Array.isArray(parsed.tasks)) {
+                        appData = { ...appData, ...parsed };
+                        saveState();
+                        renderAll();
+                        closeStatsModal();
+                        showToast('Yedek başarıyla geri yüklendi!');
+                    }
+                } catch (err) {
+                    showToast('Geçersiz yedek dosyası');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // =========================================================================
+        // 13. CİHAZ EŞİTLEME, GÜN KOPYALAMA & PLAN PAYLAŞMA
+        // =========================================================================
+        function openSyncModal() {
+            document.getElementById('sync-code-display').textContent = appData.syncCode;
+            document.getElementById('sync-modal').classList.remove('hidden');
+        }
+
+        function closeSyncModal() {
+            document.getElementById('sync-modal').classList.add('hidden');
+        }
+
+        function copySyncCode() {
+            const tmp = document.createElement('textarea');
+            tmp.value = appData.syncCode;
+            document.body.appendChild(tmp);
+            tmp.select();
+            document.execCommand('copy');
+            tmp.remove();
+            showToast('Eşleşme kodu kopyalandı! Diğer cihazınıza yapıştırabilirsiniz.');
+        }
+
+        function pairDeviceWithCode() {
+            const code = document.getElementById('sync-code-input').value.trim().toUpperCase();
+            if (!code) return;
+            appData.syncCode = code;
+            const existing = localStorage.getItem('ajandapro_cloud_' + code);
+            if (existing) {
+                try {
+                    const parsed = JSON.parse(existing);
+                    if (parsed.payload) appData = { ...appData, ...parsed.payload, syncCode: code };
+                } catch (e) {}
+            }
+            saveState();
+            renderAll();
+            openSyncModal();
+            showToast(`Cihaz ${code} koduna bağlandı!`);
+        }
+
+        function openCopyDayModal() {
+            const d = parseISODate(selectedDate);
+            d.setDate(d.getDate() + 1);
+            document.getElementById('copy-target-date').value = formatDateISO(d);
+            document.getElementById('copy-day-modal').classList.remove('hidden');
+        }
+
+        function closeCopyDayModal() {
+            document.getElementById('copy-day-modal').classList.add('hidden');
+        }
+
+        function executeCopyDay() {
+            const target = document.getElementById('copy-target-date').value;
+            if (!target) return;
+            const sourceTasks = getSortedDayTasks(selectedDate);
+            let order = getSortedDayTasks(target).length;
+            sourceTasks.forEach(t => {
+                const copy = JSON.parse(JSON.stringify(t));
+                copy.id = generateId('task');
+                copy.date = target;
+                copy.completed = false;
+                copy.order = order++;
+                appData.tasks.push(copy);
+            });
+            saveState();
+            closeCopyDayModal();
+            showToast(`${sourceTasks.length} görev ${target} tarihine kopyalandı!`);
+        }
+
+        function carryOverUnfinishedTasks() {
+            const unfinished = getSortedDayTasks(selectedDate).filter(t => !t.completed);
+            if (unfinished.length === 0) {
+                showToast('Devredilecek tamamlanmamış görev yok!');
+                return;
+            }
+            const d = parseISODate(selectedDate);
+            d.setDate(d.getDate() + 1);
+            const tomorrow = formatDateISO(d);
+            let order = getSortedDayTasks(tomorrow).length;
+            unfinished.forEach(t => {
+                t.date = tomorrow;
+                t.order = order++;
+            });
+            saveState();
+            renderAll();
+            showToast(`${unfinished.length} tamamlanmamış iş yarına devredildi!`);
+        }
+
+        function shareDailyPlanText() {
+            const tasks = getSortedDayTasks(selectedDate);
+            const water = appData.waterByDate[selectedDate] || 0;
+            const lines = [
+                `📅 *${formatTurkishDateLong(selectedDate)} Planım*`,
+                ...tasks.map(t => `${t.completed ? '✅' : '⬜'} ${typeof t.startMin === 'number' ? `[${minutesToHHMM(t.startMin)}] ` : ''}${t.title}`),
+                `💧 Su Takibi: ${water} ml / ${appData.waterGoalMl} ml`
+            ];
+            const tmp = document.createElement('textarea');
+            tmp.value = lines.join('\n');
+            document.body.appendChild(tmp);
+            tmp.select();
+            document.execCommand('copy');
+            tmp.remove();
+            showToast('Günlük plan WhatsApp/Metin formatında panoya kopyalandı!');
+        }
+
+        // =========================================================================
+        // 14. ANA RENDER DÖNGÜSÜ & BAŞLATMA
+        // =========================================================================
+        function renderAll() {
+            populateCategorySelects();
+            renderTrabzonsporBanner();
+            renderHaliSahaPrepBanner();
+            renderProgressAndSidebar();
+            renderWaterTracker();
+            renderMiniCalendar();
+            renderMitShowcase();
+            if (mainViewMode === 'day') {
+                renderTodoList();
+            } else {
+                renderWeeklyView();
+            }
+            lucide.createIcons();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            loadState();
+            renderAll();
+            updatePomodoroDisplays();
+
+            // Klavye kısayolları
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeTaskModal();
+                    closeTemplatesModal();
+                    closeCategoriesModal();
+                    closeStatsModal();
+                    closeSyncModal();
+                    closeCopyDayModal();
+                    closeShutdownModal();
+                    closeTsFixtureModal();
+                    closeZenMode();
+                }
+                const tag = document.activeElement?.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+                if (e.key === 'n' || e.key === 'N') {
+                    e.preventDefault();
+                    document.getElementById('quick-task-input')?.focus();
+                } else if (e.key === 'ArrowLeft') {
+                    shiftSelectedDate(-1);
+                } else if (e.key === 'ArrowRight') {
+                    shiftSelectedDate(1);
+                } else if (e.key === 't' || e.key === 'T') {
+                    goToToday();
+                }
+            });
+
+            // Her 1 dakikada canlı maç geri sayım kontrolü
+            setInterval(() => {
+                updateTrabzonsporCountdown();
+            }, 60000);
+        });
+    </script>
+</body>
+</html>
